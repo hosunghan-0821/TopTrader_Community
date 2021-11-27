@@ -1,0 +1,5 @@
+{
+    "php.validate.executablePath": "/usr/local/bin/php.phar",
+    "php.validate.run": "onType",
+    "php.validate.enable": false
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Document</title>
+        <style>
+            aside,
+            div,
+            footer,
+            header,
+            nav,
+            section {
+                border: solid 1px black;
+                margin: 5px;
+                font-size: 24px;
+                text-align: center;
+            }
+            nav {
+                position: sticky;
+                top: 0;
+                background-color: yellow;
+                z-index: 10;
+            }
+            main {
+                display: flex;
+            }
+            aside,
+            section {
+                flex-grow: 1;
+                height: 1200px;
+            }
+            .notSticky_box {
+                height: 400px;
+            }
+            .sticky_box {
+                position: sticky;
+                top: 36px;
+                height: 500px;
+                background-color: chartreuse;
+                z-index: 1;
+            }
+            footer {
+                height: 300px;
+                background-color: black;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <header>Header</header>
+        <nav>Nav</nav>
+        <div class="topAdd">Ads</div>
+        <div class="title">Title</div>
+        <main>
+            <aside>Sidebar Left
+                <div class="notSticky_box">General Div Box</div>
+                <div class="sticky_box">Position Sticky Box</div>
+            </aside>
+            <section>Section</section>
+            <aside>Sidebar Right</aside>
+        </main>
+        <footer>footer</footer>
+    </body>
+</html>

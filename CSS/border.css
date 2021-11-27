@@ -1,0 +1,149 @@
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+    list-style: none;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    color: #000;
+}
+a{
+    text-decoration:  none;
+    color: inherit;
+}
+
+
+.nav {
+    height: 45px;
+    padding: 1rem;
+
+    background-color: #F4F3EA;
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid black;
+    display: flex;
+    align-items: center;
+}
+
+.nav-right-items {
+    
+    justify-content: space-between;
+    display: flex;
+    margin-left: auto;
+    /* border: 1px solid black; */
+}
+
+.nav-item {
+    margin-left: 10px;
+}
+.nav-title {
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+
+}
+.board-list-wrap{
+   
+    
+    padding: 50px;
+}
+
+.board-list-head{
+    border-top: solid black 2px;
+    border-bottom: solid black 1px;
+    display: flex;
+    font-size: 0;
+    padding: 10px 0;
+}
+
+.item{
+    display: flex;
+    font-size: 0;
+    padding: 10px 0; 
+    border-bottom: solid 1px #ccc;
+}
+.board-list-head>div{
+    font-weight: 600;
+    text-align: center;
+    font-size:14px
+}
+
+.item >div{
+    text-align: center;
+    font-size: 14px;
+}
+.item >div.title{
+    text-align: left;
+}
+.item >div.title a:hover{
+    text-decoration: underline;
+}
+
+.board-list .num{
+    width: 10%;
+}
+.board-list .title{
+    width: 55%;
+}
+.board-list .writer{
+    width: 10%;
+}
+.board-list .date{
+    width: 15%;
+}
+.board-list .view{
+    width: 10%;
+}
+
+/* paging  관련 css*/
+.paging{
+    margin-top: 30px;
+    text-align: center;
+}
+.paging a{
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 100px;
+}
+.paging a.first,
+.paging a.previous
+{
+    width: 40px;
+    height: 40px;
+    background-color: #999 ;
+    background-image: url(../RESOURCE/페이징_이미지.jpg) ;
+    background-repeat: no-repeat;
+    text-indent: -1000px;
+    overflow: hidden;
+}
+
+.paging a.next,.paging a.last{
+    width: 40px;
+    height: 40px;
+    background-color: #999 ;
+    background-image: url(../RESOURCE/페이징_이미지_2.jpg);
+    background-repeat: no-repeat;
+    text-indent: -1000px;
+    overflow: hidden;
+}
+.paging a.first{
+    background-position: -341px -288px;
+}
+.paging a.previous{
+    background-position: -393px -287px;
+}
+.paging a.next{
+    background-position: -18px -17px;
+}
+.paging a.last{
+    background-position: -69px -16px;
+}
+.paging >div.write{
+  
+    display: inline;
+    cursor: pointer;
+    float: right;
+    padding-right: 20px;
+}

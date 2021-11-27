@@ -1,0 +1,30 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <input type="text"/>
+        <input type="text " value="미리입력된 텍스트">
+        <input type="password" placeholder="여기에 비밀번호를 입력하세요">
+        <br/>
+        <input type="radio" name="color" value="red">red
+        <input type="radio" name="color" value="blue">blue
+        <input type="radio" name="color" value="green">green
+
+        <input type="date" name="date"/>
+
+        <input type="range" name="score" min=0 max=100 value=50 step=5 oninput="showVal(this.value);">
+        <!--input range 출력-->
+        <span id="scoreTxt">50</span>
+        
+        <!--range 값 변화시 즉시 반영-->
+        <script>
+            function showVal(val) {
+                  document.getElementById('scoreTxt').innerHTML=val; 
+                }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+
+        <div onclick="div_click()">눌러봐</div>
+
+        <input type="text" id="name" placeholder="이름입력">
+        <input type="number" id="age" placeholder="나이입력">
+        <button id="btn_get">GET 요청</button>
+        <button id="btn_put">POST 요청</button>
+        <script>
+
+            var a;
+            const request = new XMLHttpRequest();
+
+            function div_click() {
+
+                request.open('GET', '../login.html', true);
+                request.send();
+
+                request.onreadystatechange = function (event) {
+                    if (request.readyState == 4 && request.status == 200) {
+                        a = 1;
+                        // const responseData = request.responseData; console.log("a : ".a);
+                        console.log(a);
+                        console.log(request.responseURL);
+                        //console.log(request.responseXML); //null나옴
+                        console.log(request.responseText); // 정보가 다나옴
+                        //console.log(request.responseType); // 에러뜸
+
+                        window.location.href = request.responseURL; //뒤로가기 적용하면서 현재페이지에 띄움
+                        // window.location.replace(request.responseURL); 뒤로가기 적용 x
+                        // window.open(request.responseURL); 새창으로 띄우기
+                    }
+                }
+            }
+
+            document
+                .getElementById("btn_get")
+                .addEventListener('click', function (event) {
+                 
+                    const getRequest = new XMLHttpRequest();
+                    var name = document
+                        .getElementById('name')
+                        .value;
+                    var age = document
+                        .getElementById('age')
+                        .value;
+                    getRequest.onreadystatechange = function (event) {
+                        if (getRequest.readyState == 4 && getRequest.status == 200) {
+
+                         
+                           
+                            console.log("name :" + name);
+                            console.log("age : "+ age);
+                            window.location.href = getRequest.responseURL;
+
+                        }
+
+                    }
+                    const myurl = './jsGetExample.php?name=' + name + '&age='+age;
+                    console.log(myurl);
+                    getRequest.open('GET', myurl, true);
+                    getRequest.send();
+                
+
+                    //window.open(getRequest.responseURL);
+                });
+        </script>
+    </body>
+</html>
