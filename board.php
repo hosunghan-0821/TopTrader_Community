@@ -104,8 +104,6 @@ $select_result=mysqli_query($db_connect,$select_query);
                     class="date">2019-11-20</div> <div class="view">111</div> </div> <div
                     class="item"> <div class="num">4</div> <div class="title"> <a href="#">4번 제목</a>
                     </div> <div class="writer">관리자</div> <div class="date">2019-11-20</div> <div
-                    class="view">222</div> </div> -->
-
                     <?php 
                     }
                     ?>
