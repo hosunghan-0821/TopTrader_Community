@@ -7,7 +7,7 @@ if(!isset($_SESSION['is_login'])){
 else{
     $loginCheck="true";
 }
-require_once('dbConnect.php');
+require_once('../lib/dbConnect.php');
 $db_connect=sqlCheck();
 
 $select_query="SELECT 
@@ -28,7 +28,7 @@ $select_result=mysqli_query($db_connect,$select_query);
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./CSS/border.css">
+        <link rel="stylesheet" href="../CSS/border.css">
         <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
             rel="stylesheet">
@@ -41,8 +41,12 @@ $select_result=mysqli_query($db_connect,$select_query);
             <div class="nav-left-items">
 
                 <div class="nav-title">
-                    Top Trader
-                    <br>Community
+                    
+                    <a href="myHtml.php">
+                        Top Trader
+                        <br>Community
+                    </a>
+
                 </div>
 
             </div>
@@ -50,10 +54,10 @@ $select_result=mysqli_query($db_connect,$select_query);
             <div class="nav-right-items">
 
                 <div class="nav-item">
-                    <a href="./myHtml.html">홈</a>
+                    <a href="./myHtml.php">홈</a>
                 </div>
                 <div class="nav-item">
-                    <a href="./board.html">게시판</a>
+                    <a href="./board.php">게시판</a>
                 </div>
                 <!-- <div class="nav-item">실시간 채팅</div> -->
                 <div class="nav-item">
@@ -89,21 +93,20 @@ $select_result=mysqli_query($db_connect,$select_query);
                         $Post_View=$Data['Post_View']
 
                 
-                ?>
+                     ?>
+
                     <div class="item">
 
-                        <div class="num" id="num"><?php echo $Post_Number; ?></div>
-                        <div class="title" onclick="readFunction()"><?php echo $Post_Title; ?></div>
+                        <div class="num" id="num"><?= $Post_Number; ?></div>
+                        <div class="title">
+                            <a href="boardRead.php?num=<?php echo $Post_Number?>"><?php echo $Post_Title; ?></a>
+                        </div>
                         <div class="writer"><?php echo $Post_Writer; ?></div>
                         <div class="date"><?php echo $Post_Date; ?></div>
                         <div class="view"><?php echo $Post_View; ?></div>
 
                     </div>
-                    <!-- <div class="item"> <div class="num" id="num">5</div> <div class="title"
-                    onclick="readFunction()">5번 제목</div> <div class="writer">관리자</div> <div
-                    class="date">2019-11-20</div> <div class="view">111</div> </div> <div
-                    class="item"> <div class="num">4</div> <div class="title"> <a href="#">4번 제목</a>
-                    </div> <div class="writer">관리자</div> <div class="date">2019-11-20</div> <div
+
                     <?php 
                     }
                     ?>
@@ -153,27 +156,22 @@ $select_result=mysqli_query($db_connect,$select_query);
                     .innerText = "로그아웃";
                 document
                     .getElementById("loginCheck")
-                    .href = "./logout.php";
+                    .href = "../lib/logout.php";
                 // idCheck.innerHTML = "로그아웃";
             }
 
             function writeFunction() {
-                console.log("123");
+               document.location.href='boardStandardWrite.html';
             }
             function readFunction() {
-                const request = new XMLHttpRequest();
-                var name = document
-                    .getElementById("num")
-                    .innerText;
-                console.log(name);
-                request.onreadystatechange = function () {
-                    if (request.readyState == 4 && request.status == 200) {
-                        window.location.href = request.responseURL;
-                    }
-                }
-                const myurl = './boardRead.php?num=' + name;
-                request.open('GET', myurl, true);
-                request.send();
+
+                // const request = new XMLHttpRequest(); var name = document
+                // .getElementById("num")     .innerText; console.log(name);
+                // request.onreadystatechange = function () {     if (request.readyState == 4 &&
+                // request.status == 200) {         window.location.href = request.responseURL;
+                // } } const myurl = './boardRead.php?num=' + name; request.open('GET', myurl,
+                // true); request.send();
+
             }
         </script>
 

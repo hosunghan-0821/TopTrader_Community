@@ -1,12 +1,5 @@
 <?php
-session_start();
-$loginCheck;
-if(!isset($_SESSION['is_login'])){
-    $loginCheck="false";
-}
-else{
-    $loginCheck="true";
-}
+require_once('../lib/session.php');
 ?>
 
 <html lang="en">
@@ -15,7 +8,7 @@ else{
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>주식 커뮤니티</title>
-        <link rel="stylesheet" href="./CSS/myHtml.css">
+        <link rel="stylesheet" href="../CSS/myHtml.css">
         <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
             rel="stylesheet">
@@ -27,24 +20,26 @@ else{
 
             <div class="nav-left-items">
                 <div class="nav-title">
-                    Top Trader
-                    <br>Community
+                    <a href="myHtml.php">
+                        Top Trader
+                        <br>Community
+                    </a>
                 </div>
 
             </div>
 
             <span class="search">
                 <input type="text" class="search_box" placeholder="종목명 입력">
-                <img src="./RESOURCE/search_image2.png" class="search-image">
+                <img src="../RESOURCE/img/search_image2.png" class="search-image">
             </span>
 
             <div class="nav-right-items">
 
                 <div class="nav-item">
-                    <a href="./myHtml.html">홈</a>
+                    <a href="myHtml.php">홈</a>
                 </div>
                 <div class="nav-item">
-                    <a href="./board.php">게시판</a>
+                    <a href="board.php">게시판</a>
                 </div>
                 <!-- <div class="nav-item">실시간 채팅</div> -->
                 <div class="nav-item">
@@ -154,14 +149,12 @@ else{
 
             if (a === "true") {
                 //console.log("여기 들어왔습니다.");
-
                 document
                     .getElementById("loginCheck")
                     .innerText = "로그아웃";
                 document
                     .getElementById("loginCheck")
-                    .href = "./logout.php";
-                // idCheck.innerHTML = "로그아웃";
+                    .href = "../lib/logout.php";
             }
         </script>
     </body>

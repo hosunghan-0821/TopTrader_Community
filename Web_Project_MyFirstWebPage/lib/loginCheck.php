@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once("./dbConnect.php");
+require_once("../lib/dbConnect.php");
 
 $db_connect = sqlcheck();
  
@@ -35,14 +35,14 @@ if($check==true){
     $_SESSION['nickname'] = $nickName;
     echo" <script>
     alert('로그인 성공')
-    document.location.href='./myHtml.php';
+    document.location.href='../PHP/myHtml.php';
     </script>";
     exit;
 }
 else{
     echo "<script>
     alert('로그인 실패'); 
-    document.location.href='login.html';
+    document.location.href='../PHP/login.html';
     </script>";
 }
  

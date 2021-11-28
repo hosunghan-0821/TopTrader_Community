@@ -4,7 +4,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
-        <link rel="stylesheet" href="./CSS/signup.css">
+        <link rel="stylesheet" href="../CSS/signup.css">
     </head>
     <body>
         <div id="header">
@@ -171,7 +171,7 @@
                         //여기서 추가 조건 주고 실행시키면되지.
                         var form = document.createElement('form');
                         form.setAttribute('method', 'post');
-                        form.setAttribute('action', './signup.php');
+                        form.setAttribute('action', '../lib/signup.php');
                         document.charset = "utf-8";
                         for (var key in data) {
                             var hiddenField = document.createElement('input');
@@ -227,7 +227,7 @@
                     console.log(JSON.stringify(obj));
 
                     //url에 어떤 메소드로, 어떤 내용을 보낼것인지  작성하는 부분
-                    fetch("./idVerfication.php", {
+                    fetch("../lib/idVerfication.php", {
                         method: 'POST',
                         cache: 'no-cache',
                         headers: {
@@ -276,7 +276,7 @@
                     }
                     console.log(JSON.stringify(obj));
 
-                    fetch("./idVerfication.php", {
+                    fetch("../lib/idVerfication.php", {
                         method: 'POST',
                         cache: 'no-cache',
                         headers: {

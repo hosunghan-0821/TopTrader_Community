@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../CSS//boardStandardWrite.css">
+        <title>Document</title>
+    </head>
+    <body>
+
+        <div class="nav">
+
+            <div class="nav-left-items">
+
+                <div class="nav-title">
+                    <a href="myHtml.php">
+                        Top Trader
+                        <br>Community
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="nav-right-items">
+
+                <div class="nav-item">
+                    <a href="./myHtml.php">홈</a>
+                </div>
+                <div class="nav-item">
+                    <a href="./board.php">게시판</a>
+                </div>
+                <!-- <div class="nav-item">실시간 채팅</div> -->
+                <div class="nav-item">
+                    <a href="login.html" id="loginCheck">로그인</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-title">
+                <span class="board-category">
+                    자유게시판 글쓰기
+                </span>
+
+                <span class="write-content" onclick="postContent()">
+                    글 등록
+                </span>
+            </div>
+            <form
+                id="postForm"
+                action="../lib/postUpload.php"
+                method="post"
+                enctype="multipart/form-data">
+                <div >
+                    <input type="text" name="title" class="content-title" placeholder="제목을 입력해 주세요">
+                </div>
+                <div class="notice"></div>
+                <div class="content">
+                    <textarea name="textarea" id="editor" cols="30" rows="10"></textarea>
+                </div>
+                <input id="img-selector" name="imgFile" type="file" accept="image/*"/>
+            </form>
+
+          
+        </div>
+
+        <script>
+
+            function postContent() {
+
+                let postForm = document.getElementById('postForm');
+                postForm.submit();
+               
+            }
+        </script>
+
+    </body>
+</html>

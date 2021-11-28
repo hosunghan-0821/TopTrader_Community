@@ -4,16 +4,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="./CSS/login.css">
+    <link rel="stylesheet" href="../CSS/login.css">
 </head>
 <body>
 
     <div class="top-bar">
-        Top trader community
+        <a href="myHtml.php">
+            Top trader community
+        </a>
+       
     </div>
     <div class="login-form">
         
-        <form action="./loginCheck.php" method="post">
+        <form action="../lib/loginCheck.php" method="post">
 
             <input type="text" name="id" class="text-field" placeholder="아이디" />
             <input type="password" name="password" class="text-field" placeholder="비밀번호" />
@@ -21,7 +24,7 @@
 
         </form>
 
-        <div class="sign-up"><a href="./signup.html">회원가입</a></div>
+        <div class="sign-up"><a href="signup.html">회원가입</a></div>
         <div class="links">
             비밀번호를 잃어버리셨나요?
         </div>

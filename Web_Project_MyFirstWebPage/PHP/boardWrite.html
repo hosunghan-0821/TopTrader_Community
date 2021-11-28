@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../CSS//boardWrite.css">
+        <title>Document</title>
+    </head>
+    <body>
+
+        <div class="nav">
+
+            <div class="nav-left-items">
+
+                <div class="nav-title">
+                    <a href="myHtml.php">
+                        Top Trader
+                        <br>Community
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="nav-right-items">
+
+                <div class="nav-item">
+                    <a href="./myHtml.php">홈</a>
+                </div>
+                <div class="nav-item">
+                    <a href="./board.php">게시판</a>
+                </div>
+                <!-- <div class="nav-item">실시간 채팅</div> -->
+                <div class="nav-item">
+                    <a href="login.html" id="loginCheck">로그인</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="main-title">
+                <span class="board-category">
+                    자유게시판 글쓰기
+                </span>
+
+                <span class="write-content">
+                    글 등록
+                </span>
+            </div>
+            <div >
+                <input type="text" class="content-title" placeholder="제목을 입력해 주세요">
+            </div>
+            <div class="notice"></div>
+            <div class="sticky-box">
+
+                <div id="editor" contenteditable="true"></div>
+                <div class="editor-menu">
+
+                    <button id="btn-bold">
+                        <b>B</b>
+                    </button>
+                    <button id="btn-italic">
+                        <i>I</i>
+                    </button>
+                    <button id="btn-underline">
+                        <u>U</u>
+                    </button>
+                    <button id="btn-image">
+                        IMG
+                    </button>
+                    <input id="img-selector" type="file" accept="image/*"/>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="check" onclick="checkChild()">
+            확인
+        </div>
+
+        <script>
+            const editor = document.getElementById('editor');
+            const btnBold = document.getElementById('btn-bold');
+            const btnItalic = document.getElementById('btn-italic');
+            const btnUnderline = document.getElementById('btn-underline');
+            const btnImage = document.getElementById('btn-image');
+            const imageSelector = document.getElementById('img-selector');
+
+            btnBold.addEventListener('click', function () {
+                setStyle('bold');
+            });
+            btnItalic.addEventListener('click', function () {
+                setStyle('italic');
+            });
+            btnUnderline.addEventListener('click', function () {
+                setStyle('underline');
+            });
+            btnImage.addEventListener('click', function () {
+                imageSelector.click();
+            });
+
+            function setStyle(style) {
+                document.execCommand(style);
+                focusEditor();
+            }
+            function focusEditor() {
+                editor.focus({preventScroll: true});
+            }
+
+            imageSelector.addEventListener('change', function (e) {
+
+                const files = e.target.files;
+
+                if (files) {
+
+                    insertImageDate(files[0]);
+                    console.log(files[0]);
+
+                }
+            });
+
+            function insertImageDate(file) {
+
+                const reader = new FileReader();
+                reader.addEventListener('load', function (e) {
+
+                    focusEditor();
+                    document.execCommand('insertImage', false, `${reader.result}`);
+
+                    //document.execCommand('insertImage',false,"../RESOURCE/img/abcd.png");
+
+                });
+                reader.readAsDataURL(file);
+            }
+
+            let form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', '../lib/postUpload.php');
+
+            // <!-- 글 작성할 떄, 이미지 업로드하는 script -->
+            function checkChild() {
+
+                // let childNum = editor.childElementCount; let child= editor.childNodes;
+                // console.log(childNum); console.log(child);
+                let outputString;
+                if (editor.hasChildNodes()) {
+                    var children = editor.childNodes;
+                    for (var i = 0; i < children.length; i++) {
+                        outputString += "자식노드: " + children[i].nodeName + "<br />";
+                    }
+                    console.log(outputString);
+                }
+            }
+        </script>
+
+    </body>
+</html>

@@ -3,6 +3,6 @@
     session_destroy();
     echo "<script>
     alert('로그아웃'); 
-    document.location.href='myHtml.php';
+    document.location.href='../PHP/myHtml.php';
     </script>";
 ?>

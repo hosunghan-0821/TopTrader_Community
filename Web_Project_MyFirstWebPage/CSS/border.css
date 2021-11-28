@@ -113,7 +113,7 @@ a{
     width: 40px;
     height: 40px;
     background-color: #999 ;
-    background-image: url(../RESOURCE/페이징_이미지.jpg) ;
+    background-image: url(../RESOURCE/img/페이징_이미지.jpg) ;
     background-repeat: no-repeat;
     text-indent: -1000px;
     overflow: hidden;
@@ -123,7 +123,7 @@ a{
     width: 40px;
     height: 40px;
     background-color: #999 ;
-    background-image: url(../RESOURCE/페이징_이미지_2.jpg);
+    background-image: url(../RESOURCE/img/페이징_이미지_2.jpg);
     background-repeat: no-repeat;
     text-indent: -1000px;
     overflow: hidden;
