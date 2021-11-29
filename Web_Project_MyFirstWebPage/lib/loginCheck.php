@@ -32,7 +32,8 @@ while($Data = mysqli_fetch_array($select_result)){
 if($check==true){
     //header('Location: ./myHtml.html');
     $_SESSION['is_login'] = true;
-    $_SESSION['nickname'] = $nickName;
+    $_SESSION['nickName'] = $nickName;
+    $check= $_SESSION['nickName'];
     echo" <script>
     alert('로그인 성공')
     document.location.href='../PHP/myHtml.php';

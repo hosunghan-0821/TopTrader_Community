@@ -17,9 +17,10 @@ Post_Title,
 Post_Like,
 Post_View,
 Post_Date  
-from PostTable";
+from PostTable ORDER BY Post_date desc" ;
 $select_result=mysqli_query($db_connect,$select_query);
- 
+
+//$num=mysqli_num_rows($select_result);
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +42,7 @@ $select_result=mysqli_query($db_connect,$select_query);
             <div class="nav-left-items">
 
                 <div class="nav-title">
-                    
+
                     <a href="myHtml.php">
                         Top Trader
                         <br>Community
@@ -82,6 +83,7 @@ $select_result=mysqli_query($db_connect,$select_query);
                 <div class="board-list-body" id="postBody">
 
                     <?php
+
                     while($Data = mysqli_fetch_array($select_result))
                     {
 
@@ -90,8 +92,15 @@ $select_result=mysqli_query($db_connect,$select_query);
                         $Post_Title=$Data['Post_Title'];
                         //$Post_Content=$Data['Post_Content'];
                         $Post_Date = $Data['Post_Date'];
-                        $Post_View=$Data['Post_View']
-
+                        $Post_View=$Data['Post_View'];
+                        $dateTime=explode(" ", $Post_Date);
+                        $nowDate= date("Y-m-d");
+                        if($nowDate===$dateTime[0]){
+                            $boardTime=$dateTime[1];
+                        }
+                        else{
+                            $boardTime=$dateTime[0];
+                        }
                 
                      ?>
 
@@ -102,7 +111,7 @@ $select_result=mysqli_query($db_connect,$select_query);
                             <a href="boardRead.php?num=<?php echo $Post_Number?>"><?php echo $Post_Title; ?></a>
                         </div>
                         <div class="writer"><?php echo $Post_Writer; ?></div>
-                        <div class="date"><?php echo $Post_Date; ?></div>
+                        <div class="date"><?php echo $boardTime; ?></div>
                         <div class="view"><?php echo $Post_View; ?></div>
 
                     </div>
@@ -161,7 +170,7 @@ $select_result=mysqli_query($db_connect,$select_query);
             }
 
             function writeFunction() {
-               document.location.href='boardStandardWrite.html';
+                document.location.href = 'boardStandardWrite.php';
             }
             function readFunction() {
 

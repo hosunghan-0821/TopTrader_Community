@@ -105,3 +105,14 @@ a{
 .check{
     font-size: 100px;
 }
+.write-content{
+    border : black solid 1px;
+    color: dodgerblue;
+    cursor: pointer;
+}
+.img-reset{
+    background: #ccc;
+    margin-left: 32px;
+    border: 1px black solid;
+    cursor: pointer;
+}

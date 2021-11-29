@@ -54,9 +54,13 @@
     display: block;
 }
 
-.main-writer,
-.write-date{
+.main-writer{
     margin-top: 10px; 
+    margin-bottom: 30px;
+}
+.write-date{
+    display: inline;
+ 
 }
 .content-image{
     display: block;
@@ -92,6 +96,20 @@
     margin: 5px;
     padding: 5px;
     border-bottom: 1px solid #ccc;
+}
+.write-date-date{
+    float: right;
+}
+.bottom-function{
+    margin-top: 20px;
+    float: right;
+}
+.bottom-function-update,
+.bottom-function-delete{
+    border: 1px solid black;
+    padding: 5px;
+    text-align: center;
+    margin-left: 10px;
 }
 
 
