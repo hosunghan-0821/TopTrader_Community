@@ -88,8 +88,9 @@ $nowDate= date("Y-m-d");
             </div>
 
             <div class="main-content">
+
                 <div class="content-image" id="image">
-                    <img src="<?php echo "$imageRoute" ?>" alt="">
+                    <img id="content-image" src="<?php echo "$imageRoute" ?>" alt="">
                 </div>
 
                 <div class="content">
@@ -138,26 +139,55 @@ $nowDate= date("Y-m-d");
             
             function updateFunction(){
                 
-                document.location.href = 'boardStandardWrite.php?Post_Num='+'<?php echo $serialNum; ?>';
-                // let data ={
-                //     title : "",
-                //     content : "",
-                //     imageRoute : ""
-                // }
-
-                // let form=document.createElement('form');
-                // form.setAttribute('method','post');
-                // form.setAttribute('action','../PHP/boardStandardWrite.php');
-                // for (let key in data){
-                //     var textField =document.createElement('input');
-                //     textField.setAttribute('type','text');
-                //     textField.setAttribute('name',key);
-                //     textField.setAttribute('value',data[key]);
-                // }
-                // document.body.appendchild(form);
-                // form.submit();
+                let form=document.createElement('form');
+                form.setAttribute('method','post');
+                form.setAttribute('action','../PHP/boardStandardWrite.php');
+               
+                var textField =document.createElement('input');
+                textField.setAttribute('type','text');
+                textField.setAttribute('name','Post_Num');
+                textField.setAttribute('value','<?php echo $serialNum; ?>');
+                form.appendChild(textField);
+                document.body.appendChild(form);
+                form.submit();
             }
             function deleteFunction(){
+
+                if(confirm("정말 삭제하시겠습니까?")==true){
+                    //여기서 post_delete 시킨다.
+                    console.log("123");
+                    fetch("../lib/deleteUpload.php",{
+                        method: 'POST',
+                        cache: 'no-cache',
+                        headers :{
+                            'Content-Type': 'application/json; charset=utf-8'
+                        },
+                        body : JSON.stringify({num : <?php echo $serialNum;?>})
+
+                    })
+                    .then((res)=>res.text())
+                    .then((data)=>{
+                        console.log(data);
+                        switch(data){
+                            case 'true':
+                            {
+                                alert("글을 삭제하였습니다.")
+                                document.location.href="../PHP/board.php";
+                                break;
+                            }
+                            case 'false':
+                            {
+                                alert("글 삭제 실패하였습니다.")
+                                break;
+                                
+                            }
+                        }
+                    });
+
+                }
+                else{
+                    return false;
+                }
 
             }
 

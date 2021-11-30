@@ -2,9 +2,9 @@
 require_once('../lib/session.php');
 
 //update 로 들어왔을 경우 글 번호를 갖고, 수정하기 위해 데이터 불러오기.
-if(isset($_GET['Post_Num'])){
+if(isset($_POST['Post_Num'])){
     $updateCheck="true";
-    $serialNum=$_GET['Post_Num'];
+    $serialNum=$_POST['Post_Num'];
     require_once('../lib/dbConnect.php');
     $db_connect = sqlCheck();
     

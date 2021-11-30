@@ -67,7 +67,13 @@
     width: 100%;
     text-align: center;
     margin-top: 50px;
-    background-size: contain;
+    background-repeat: no-repeat;
+    
+}
+#content-image{
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
 }
 .content{
     margin: 50px;
@@ -110,6 +116,8 @@
     padding: 5px;
     text-align: center;
     margin-left: 10px;
+    cursor: pointer;
 }
+
 
 

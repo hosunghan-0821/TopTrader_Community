@@ -1,5 +1,13 @@
 <?php
-require_once('../lib/session.php');
+    require_once('../lib/session.php');
+
+    if(!isset($_SESSION['nickName'])){
+        $NickName="";
+
+    }
+    else{
+        $NickName=$_SESSION['nickName'];
+    }
 ?>
 
 <html lang="en">
@@ -44,6 +52,9 @@ require_once('../lib/session.php');
                 <!-- <div class="nav-item">실시간 채팅</div> -->
                 <div class="nav-item">
                     <a href="login.html" id="loginCheck">로그인</a>
+                </div>
+                <div class="nav-item">
+                    <div id="mypage"></div>
                 </div>
             </div>
 
@@ -155,6 +166,24 @@ require_once('../lib/session.php');
                 document
                     .getElementById("loginCheck")
                     .href = "../lib/logout.php";
+
+                let mypage =document.getElementById("mypage");
+                mypage.innerText="내 정보";
+                mypage.addEventListener('click',function(e){
+
+                    let form = document.createElement('form');
+                    form.setAttribute('method', 'post');
+                    form.setAttribute('action', '../PHP/mypage.php');
+
+                    let inputField= document.createElement('input');
+                    inputField.setAttribute('type', 'text');
+                    inputField.setAttribute('name', 'nickName');
+                    inputField.setAttribute('value', '<?php  echo $NickName; ?>');
+                    form.appendChild(inputField);
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            
             }
         </script>
     </body>

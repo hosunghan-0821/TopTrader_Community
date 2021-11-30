@@ -1,0 +1,111 @@
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+    list-style: none;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    color: #000;
+}
+body {
+    background-color: #F4F3EA;
+    /* background-color: #ccc; */
+}
+.nav {
+
+    margin-top: 20px;
+    border-bottom: 1px black solid;
+}
+.nav-item {
+
+    position: relative;
+
+    height: 70px;
+    margin: 10px 20px;
+    padding: 0 20px;
+
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: 1fr ; */
+}
+.member-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper > div {
+    width: 700px;
+    height: auto;
+    border: 2px white solid;
+    margin: 40px 10px 10px;
+}
+.member-info {
+    margin: 30px;
+    border-bottom: black 0.5px solid;
+}
+.member-info-content {
+    margin: 10px 30px;
+}
+
+.member-data {
+
+    line-height:40px;
+    vertical-align: middle;
+    width: 500px;
+    height: 40px;
+    border: #ccc;
+    background: white;
+    margin-top: 20px;
+
+}
+#member-id{
+    margin-right: 20px;
+    float: right;
+}
+#member-email {
+    margin-right: 20px;
+    float: right;
+
+}
+#member-nickname {
+
+    border: 1px solid #ccc;
+    height: 35px;
+    line-height: 40px;
+    text-align: right;
+    display: inline;
+    margin-right: 20px;
+    float: right;
+}
+.member-out
+{
+    width: 500px;
+    display: flex;
+
+    flex-direction: row;
+    margin: 10px 30px;
+    justify-content: flex-end;
+}
+.member-out>span{
+    background: #ccc;
+    border: 1px solid black;
+    margin-left: 10px;
+    cursor: pointer;
+}
+#changeInput
+{
+    display: none;
+    
+    margin : 10px 30px 10px;
+    text-align: right;
+    border: none;
+    height: 40px;
+    line-height: 40px;
+    width: 500px;
+}
