@@ -1,22 +1,37 @@
 <?php 
-require_once('../lib/session.php');
-require_once('../lib/dbConnect.php');
-$serialNum=$_GET['num'];
+    require_once('../lib/session.php'); 
+    require_once('../lib/dbConnect.php');
+    header("Cache-Control: no-cache");
+    $serialNum=$_GET['num'];
 
-$db_connect = sqlCheck();
+    $db_connect = sqlCheck();
 
-$select_query="SELECT * from PostTable where Post_Number=$serialNum and Post_Category='자유게시판' ";
-$select_result = mysqli_query($db_connect,$select_query);
-$Data = mysqli_fetch_array($select_result);
+    $select_query="SELECT * from PostTable where Post_Number=$serialNum and Post_Category='자유게시판' ";
+    $select_result = mysqli_query($db_connect,$select_query);
+    $Data = mysqli_fetch_array($select_result);
+    $postHost="false";
+    $name=$Data['Post_Writer'];
+    if($name==null){
+        $postHost="false";
+        $name="탈퇴한 회원입니다.";
+    }
+    else{
+        if($loginCheck=="true"){
+        
+            if($_SESSION['nickName']==$name){
+                $postHost="true";
+             }
+        }
+   
+    }
 
-$name=$Data['Post_Writer'];
-$date=$Data['Post_Date'];
-$imageRoute=$Data['Post_Image_Route'];
-$content=$Data['Post_Content'];
-$title=$Data['Post_Title'];
+    $date=$Data['Post_Date'];
+    $imageRoute=$Data['Post_Image_Route'];
+    $content=$Data['Post_Content'];
+    $title=$Data['Post_Title'];
 
-$dateTime=explode(" ",$date);
-$nowDate= date("Y-m-d");
+    $dateTime=explode(" ",$date);
+    $nowDate= date("Y-m-d");
 // echo $dateTime[0]."<br/>";
 // echo $dateTime[1];
 
@@ -73,18 +88,30 @@ $nowDate= date("Y-m-d");
             <div class="main-title">
 
                 <div class="main-writer">
-                    작성자 :
-                    <?php echo "$name" ?>
+
+                    <div class="write-data">
+                        <div class="write-index">작성자 :</div>
+                        <div class="write-content"> <?php echo "$name" ?> </div>
+                    </div>
+
+                  
+                  
                 </div>
                 <div class="write-date">
-                    <span>
-                        제목 :
-                        <?php echo "$title" ?></span>
-                    <span class="write-date-date">
-                        작성일 :
-                        <?php echo "$dateTime[0]" ?></span>
 
+                    <div class="write-data">
+                        <div class="write-index"> 제목&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</div>
+                         <div class="write-content"> <?php echo "$title" ?></div>
+                    </div>
+
+                    <div class="write-data">
+                        <div class="write-index">작성일 :</div>    
+                         <div class="write-content"><?php echo "$dateTime[0]" ?> </div>
+                       
+                    </div>
+                    <div class="write-border"> </div>
                 </div>
+
             </div>
 
             <div class="main-content">
@@ -102,23 +129,34 @@ $nowDate= date("Y-m-d");
             <div class="bottom-comment">
 
                 <div class="comment-head">
-                    <div>좋아요 :
+                    <div>좋아요 : <?php echo $Data['Post_Like'] ?>
                     </div>
-                    <div>조회수 :
+                    <div>조회수 : <?php echo $Data['Post_View'] ?>
                     </div>
-                    <div>댓글 :
+                    <div>댓글 : <?php echo $Data['Post_Reply_Num']?>
                     </div>
                 </div>
 
                 <div class="comment">
+
                     <div class="id">
-                        id
+                        작성자 이름들어갈 곳
                     </div>
                     <div class="comment-content">
-                        댓글 내용
+                        댓글 내용 들어갈 곳
                     </div>
+                    <div class="comment-time">
+
+                        <div>ex) 2021-12-01 17:00</div>
+                        <div>답글 쓰기 버튼</div>
+                    </div>
+                
+                
                 </div>
 
+                <div class="comment-plus">
+                    <!-- <textarea class="comment-textarea" name="" id="" cols="30" rows="10"></textarea> -->
+                </div>
             </div>
 
             <div class="bottom-function">
@@ -136,9 +174,17 @@ $nowDate= date("Y-m-d");
 
         <!-- 이 스크립트는 updateFunction & deleteFunction 관련한 스크립트 -->
         <script>
-            
+            let updateButton = document.getElementById('post-update');
+            let deleteButton = document.getElementById('post-delete');
+            if('<?php echo $postHost ?>'=="false"){
+                console.log("123");
+                updateButton.style.display="none";
+                deleteButton.style.display="none";
+            }
+
             function updateFunction(){
-                
+
+           
                 let form=document.createElement('form');
                 form.setAttribute('method','post');
                 form.setAttribute('action','../PHP/boardStandardWrite.php');

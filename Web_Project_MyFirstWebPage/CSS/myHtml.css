@@ -20,6 +20,9 @@
     display: flex;
     align-items: center;
 }
+.mypage{
+    cursor: pointer;
+}
 
 .nav-right-items {
 

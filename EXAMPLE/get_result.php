@@ -90,10 +90,11 @@ echo "<hr>";
 **********************************************/
 
 // 임시로 저장된 정보(tmp_name)
+$countfiles = count($_FILES['imgFile']['name']);
 $tempFile = $_FILES['imgFile']['tmp_name'];
 
 // 파일타입 및 확장자 체크
-$fileTypeExt = explode("/", $_FILES['imgFile']['type']);
+$fileTypeExt = explode("/", $_FILES['imgFile']['type'][0]);
 
 // 파일 타입 
 $fileType = $fileTypeExt[0];
@@ -124,7 +125,7 @@ if($fileType == 'image'){
 	// 허용할 확장자를 jpg, bmp, gif, png로 정함, 그 외에는 업로드 불가
 	if($extStatus){
 		// 임시 파일 옮길 디렉토리 및 파일명
-		$resFile = "../img/{$_FILES['imgFile']['name']}";
+		$resFile = "./img/{$_FILES['imgFile']['name']}";
 		// 임시 저장된 파일을 우리가 저장할 디렉토리 및 파일명으로 옮김
 		$imageUpload = move_uploaded_file($tempFile,$resFile);
 		

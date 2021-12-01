@@ -33,6 +33,7 @@ if($check==true){
     //header('Location: ./myHtml.html');
     $_SESSION['is_login'] = true;
     $_SESSION['nickName'] = $nickName;
+    $_SESSION['ID']=$Data['Member_ID'];
     $check= $_SESSION['nickName'];
     echo" <script>
     alert('로그인 성공')

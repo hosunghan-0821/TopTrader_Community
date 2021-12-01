@@ -54,7 +54,7 @@
                     <a href="login.html" id="loginCheck">로그인</a>
                 </div>
                 <div class="nav-item">
-                    <div id="mypage"></div>
+                    <div id="mypage" class="mypage"></div>
                 </div>
             </div>
 

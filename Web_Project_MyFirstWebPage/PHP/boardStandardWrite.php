@@ -99,7 +99,9 @@ else{
                         class="content-title"
                         placeholder="제목을 입력해 주세요">
                 </div>
-                <div class="notice"></div>
+                <div class="notice">
+                    ***공지사항***
+                </div>
                 <div class="content">
                     <textarea name="textarea" id="editor" cols="30" rows="10"></textarea>
                 </div>
