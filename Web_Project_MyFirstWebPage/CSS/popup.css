@@ -1,0 +1,29 @@
+*{
+    list-style: none;
+}
+/* .wrapper{
+    background: #F4F3EA;
+} */
+body{
+    background: #F4F3EA;
+}
+footer{
+    position:absolute;
+    bottom:0;
+    right: 0;
+    margin: 10px;
+    text-align: right;
+}
+.community-name{
+    text-align: center;
+    font-weight: 700;
+    margin: 35px;
+}
+.head-title{
+    margin: 10px; 
+    font-size: 20px;
+    font-weight: 600; 
+}
+.content>div{
+    margin: 30px 5px 5px;
+}

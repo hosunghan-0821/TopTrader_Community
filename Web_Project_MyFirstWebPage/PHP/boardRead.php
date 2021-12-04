@@ -1,16 +1,37 @@
 <?php 
+
     require_once('../lib/session.php'); 
     require_once('../lib/dbConnect.php');
-    header("Cache-Control: no-cache");
-    $serialNum=$_GET['num'];
-
     $db_connect = sqlCheck();
 
+    header("Cache-Control: no-cache");
+    $serialNum=$_GET['num'];
+    if(isset($_GET['scroll'])){
+        $scroll=$_GET['scroll'];
+    }
+    else{
+        $scroll="0";
+    }
+
+    //댓글 위한 쿼리문
+    $sql="SELECT * from PostReplyTable where Reply_Post_Num=$serialNum ORDER BY Reply_Reg_date desc"; 
+
+    if(isset($_SESSION['nickName'])){
+        $nickName=$_SESSION['nickName'];
+    }
+    else{
+        $nickName="_";
+    }
+   
+    //게시글 읽기위한 쿼리문
     $select_query="SELECT * from PostTable where Post_Number=$serialNum and Post_Category='자유게시판' ";
+  
     $select_result = mysqli_query($db_connect,$select_query);
     $Data = mysqli_fetch_array($select_result);
     $postHost="false";
     $name=$Data['Post_Writer'];
+   
+
     if($name==null){
         $postHost="false";
         $name="탈퇴한 회원입니다.";
@@ -22,14 +43,11 @@
                 $postHost="true";
              }
         }
-   
     }
-
     $date=$Data['Post_Date'];
     $imageRoute=$Data['Post_Image_Route'];
     $content=$Data['Post_Content'];
     $title=$Data['Post_Title'];
-
     $dateTime=explode(" ",$date);
     $nowDate= date("Y-m-d");
 // echo $dateTime[0]."<br/>";
@@ -91,25 +109,28 @@
 
                     <div class="write-data">
                         <div class="write-index">작성자 :</div>
-                        <div class="write-content"> <?php echo "$name" ?> </div>
+                        <div class="write-content">
+                            <?php echo "$name" ?>
+                        </div>
                     </div>
 
-                  
-                  
                 </div>
                 <div class="write-date">
 
                     <div class="write-data">
-                        <div class="write-index"> 제목&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</div>
-                         <div class="write-content"> <?php echo "$title" ?></div>
+                        <div class="write-index">
+                            제목&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</div>
+                        <div class="write-content">
+                            <?php echo "$title" ?></div>
                     </div>
 
                     <div class="write-data">
-                        <div class="write-index">작성일 :</div>    
-                         <div class="write-content"><?php echo "$dateTime[0]" ?> </div>
-                       
+                        <div class="write-index">작성일 :</div>
+                        <div class="write-content"><?php echo "$dateTime[0]" ?>
+                        </div>
+
                     </div>
-                    <div class="write-border"> </div>
+                    <div class="write-border"></div>
                 </div>
 
             </div>
@@ -129,42 +150,83 @@
             <div class="bottom-comment">
 
                 <div class="comment-head">
-                    <div>좋아요 : <?php echo $Data['Post_Like'] ?>
+                    <div>좋아요 :
+                        <?php echo $Data['Post_Like'] ?>
                     </div>
-                    <div>조회수 : <?php echo $Data['Post_View'] ?>
+                    <div>조회수 :
+                        <?php echo $Data['Post_View'] ?>
                     </div>
-                    <div>댓글 : <?php echo $Data['Post_Reply_Num']?>
+                    <div>댓글 :
+                        <?php echo $Data['Post_Reply_Num']?>
                     </div>
+                </div>
+
+                <div class="comment-plus">
+
+                    <form action="../lib/replyUpload.php" method="POST" id="replyForm">
+                        <textarea
+                            class="comment-textarea"
+                            name="reply"
+                            id="editor"
+                            placeholder="저작권 등 다른 사람의 권리를 침해하거나 명예를 훼손하는 게시물은 이용약관 및 관련 법률에 의해 제재를 받을 수 있습니다. "></textarea>
+                        <div class="comment-plus-button" onclick="replySubmit()">댓글추가</div>
+                        <input type="hidden" name="postNum" value="<?php echo $serialNum; ?>">
+                        <input id="scroll" type="hidden" name="scroll">
+                    </form>
+
                 </div>
 
                 <div class="comment">
 
-                    <div class="id">
-                        작성자 이름들어갈 곳
-                    </div>
-                    <div class="comment-content">
-                        댓글 내용 들어갈 곳
-                    </div>
-                    <div class="comment-time">
+                    <?php 
+                     $selectReply=mysqli_query($db_connect,$sql);
+                     while($replyData = mysqli_fetch_array($selectReply))
+                     {
+                        $replyContent=$replyData['Reply_Content'];
+                        $replyContentPrint = str_replace("\r\n", "</br>", $replyContent);
+                        $replyContentPrintJS = str_replace("\r\n", "\\n", $replyContent);
 
-                        <div>ex) 2021-12-01 17:00</div>
-                        <div>답글 쓰기 버튼</div>
+                    ?>
+                    <div class="reply-item">
+
+                        <div class="comment-id">닉네임 :
+                            <?php echo $replyData['Reply_Writer'] ?></div>
+                        <div class="comment-time">
+                            <div><?php echo $replyData['Reply_Reg_Update'] ?></div>
+                            <div class="right-item">
+
+                                <div class="comment-update" onclick="replyUpdateFunction( '<?php  echo $replyData['Reply_Writer']; ?>',  '<?php echo $replyData['no']; ?>')"> 수정 </div>
+                                <div class="comment-delete" onclick="replyDeleteFunction('<?php  echo $replyData['Reply_Writer']; ?>', <?php echo $replyData['no']; ?>)">삭제</div>
+                                
+                            </div>
+                        </div>
+                        <textarea id="comment-content<?php echo $replyData['no']?>" class="comment-content" disabled><?php echo  $replyContent; ?></textarea>
+                        <div class="hidden-comment">
+                            <textarea id="comment-content-update<?php echo $replyData['no']?>" class ="comment-content-update" name="replyUpdate" id="" cols="30" rows="3"></textarea>
+                            <div id="comment-update-button<?php echo $replyData['no'] ?>" class="comment-update-button"  >댓글수정</div>
+                        </div>
+                      
+
                     </div>
-                
-                
+                    <?php 
+                     }
+                    ?>
                 </div>
 
-                <div class="comment-plus">
-                    <!-- <textarea class="comment-textarea" name="" id="" cols="30" rows="10"></textarea> -->
-                </div>
             </div>
 
             <div class="bottom-function">
 
-                <span id="post-update" class="bottom-function-update" onclick="updateFunction()">
+                <span
+                    id="post-update"
+                    class="bottom-function-update"
+                    onclick="updateFunction()">
                     수정
                 </span>
-                <span id="post-delete" class="bottom-function-delete" onclick="deleteFunction()">
+                <span
+                    id="post-delete"
+                    class="bottom-function-delete"
+                    onclick="deleteFunction()">
                     삭제
                 </span>
 
@@ -176,70 +238,69 @@
         <script>
             let updateButton = document.getElementById('post-update');
             let deleteButton = document.getElementById('post-delete');
-            if('<?php echo $postHost ?>'=="false"){
+            if ('<?php echo $postHost ?>' == "false") {
                 console.log("123");
-                updateButton.style.display="none";
-                deleteButton.style.display="none";
+                updateButton.style.display = "none";
+                deleteButton.style.display = "none";
             }
 
-            function updateFunction(){
+            function updateFunction() {
 
-           
-                let form=document.createElement('form');
-                form.setAttribute('method','post');
-                form.setAttribute('action','../PHP/boardStandardWrite.php');
-               
-                var textField =document.createElement('input');
-                textField.setAttribute('type','text');
-                textField.setAttribute('name','Post_Num');
-                textField.setAttribute('value','<?php echo $serialNum; ?>');
+                let form = document.createElement('form');
+                form.setAttribute('method', 'post');
+                form.setAttribute('action', '../PHP/boardStandardWrite.php');
+
+                var textField = document.createElement('input');
+                textField.setAttribute('type', 'text');
+                textField.setAttribute('name', 'Post_Num');
+                textField.setAttribute('value', '<?php echo $serialNum; ?>');
                 form.appendChild(textField);
-                document.body.appendChild(form);
+                document
+                    .body
+                    .appendChild(form);
                 form.submit();
             }
-            function deleteFunction(){
+            function deleteFunction() {
 
-                if(confirm("정말 삭제하시겠습니까?")==true){
+                if (confirm("정말 삭제하시겠습니까?") == true) {
                     //여기서 post_delete 시킨다.
                     console.log("123");
-                    fetch("../lib/deleteUpload.php",{
+                    fetch("../lib/deleteUpload.php", {
                         method: 'POST',
                         cache: 'no-cache',
-                        headers :{
+                        headers: {
                             'Content-Type': 'application/json; charset=utf-8'
                         },
-                        body : JSON.stringify({num : <?php echo $serialNum;?>})
+                        body: JSON.stringify({num: <?php echo $serialNum;?>})
 
                     })
-                    .then((res)=>res.text())
-                    .then((data)=>{
-                        console.log(data);
-                        switch(data){
-                            case 'true':
-                            {
-                                alert("글을 삭제하였습니다.")
-                                document.location.href="../PHP/board.php";
-                                break;
-                            }
-                            case 'false':
-                            {
-                                alert("글 삭제 실패하였습니다.")
-                                break;
-                                
-                            }
-                        }
-                    });
+                        .then((res) => res.text())
+                        .then((data) => {
+                            console.log(data);
+                            switch (data) {
+                                case 'true':
+                                    {
+                                        alert("글을 삭제하였습니다.")
+                                        document.location.href = "../PHP/board.php";
+                                        break;
+                                    }
+                                case 'false':
+                                    {
+                                        alert("글 삭제 실패하였습니다.")
+                                        break;
 
-                }
-                else{
+                                    }
+                            }
+                        });
+
+                } else {
                     return false;
                 }
 
             }
-
         </script>
 
-          <!-- 이 스크립트는 로그인 관련, php 코드를 써야해서.. 분리 안됨... -->
+        <!-- 이 스크립트는 로그인 관련, php 코드를 써야해서.. 분리 안됨... -->
         <script>
 
             //로그인 세션을 활용하여서, 상단 네비게이션바 로그인-> 로그아웃으로 텍스트 변경하는 코드
@@ -257,11 +318,121 @@
                 // idCheck.innerHTML = "로그아웃";
             }
 
-
             //불러온 글의 이미지가 없을 경우 이미지 영역을 style.display = "none" 함으로써 글의 위치가 적당하게 나오게하는 코드
             if ("<?php echo $imageRoute; ?>" == "") {
                 let image = document.getElementById("image");
                 image.style.display = "none";
+            }
+
+            window.scrollTo(0, <?php echo $scroll; ?>);
+
+            //댓글 달기 & 수정 관련 스크립트
+            function replySubmit() {
+
+                if(a==="false"){
+                    alert("로그인 해주세요");
+                    return false;
+                }
+                var scrollPosition = window.scrollY || document.documentElement.scrollTop;
+     
+                let scroll = document.getElementById('scroll');
+                scroll.value = scrollPosition;
+                let replyForm = document.getElementById('replyForm');
+                replyForm.submit();
+            }
+            
+
+            function replyUpdateFunction(replyWriter,replyNum){
+              
+                if(replyWriter==="<?php echo $nickName; ?>"){
+                    let commentContentId='comment-content'+replyNum;
+                    let commentUpdateId='comment-content-update'+replyNum;
+                    let commentupdateButtonId='comment-update-button'+replyNum;
+                    //console.log(commentUpdateId);
+                    let commentNow = document.getElementById(commentContentId);
+                    let commentUpdate= document.getElementById(commentUpdateId);
+                    let commentUpdateButton =document.getElementById(commentupdateButtonId);
+
+
+                    console.log(commentNow.innerText);
+                    commentNow.style.display="none";
+                    commentUpdate.style.display="block";
+                    //br태그를 \\n 으로 바꿔줘야함. innerText를
+
+                    commentUpdate.value=commentNow.innerText;
+                   
+                    commentUpdateButton.style.display="flex";
+                    //수정하는 로직
+                    commentUpdateButton.addEventListener('click',function(){
+                        if(confirm("댓글 정말 수정하시겠습니까?")== true){
+                            fetch("../lib/updateReply.php",{
+
+                            method: 'POST',
+                            cache: 'no-cache',
+                            headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                            },
+                            body: JSON.stringify({
+                                replyNum : replyNum,
+                                replyContent:commentUpdate.value
+
+                            })
+
+                            })
+                            .then((res) => res.text())
+                            .then((data)=> {
+                                if(data=='true'){
+                                    location.reload();
+                                }
+                                else{
+                                    alert("글 수정 실패하였습니다.");
+                                }
+                            });
+                        }
+                        else{
+                            location.reload();
+                        }
+
+                    });
+                }
+                else{
+                    alert("자신이 작성한 글만 수정 가능합니다.");
+                }
+            }
+          
+            
+            function replyDeleteFunction(replyWriter,replyNum){
+
+                if(replyWriter==="<?php echo $nickName; ?>"){
+                    //삭제하는  로직
+
+                    if(confirm("댓글 정말 삭제하시겠습니까?")== true){
+                        fetch("../lib/deleteReply.php",{
+
+                            method: 'POST',
+                            cache: 'no-cache',
+                            headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        },
+                        body: JSON.stringify({replyNum : replyNum})
+
+
+                        })
+                        .then((res) => res.text())
+                        .then((data)=> {
+                            if(data=='true'){
+                                location.reload();
+                            }
+                            else{
+                                alert("글 삭제 실패하였습니다.");
+                            }
+                        });
+
+                    }
+                }
+                else{
+                    alert("자신이 작성한 글만 삭제 가능합니다.");
+                }
             }
         </script>
 

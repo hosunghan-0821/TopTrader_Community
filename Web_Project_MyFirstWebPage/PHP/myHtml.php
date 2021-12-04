@@ -20,7 +20,10 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
             rel="stylesheet">
+        <script>
 
+          
+        </script>
     </head>
     <body>
 
@@ -156,8 +159,6 @@
 
             var a = "<?php echo  $loginCheck; ?>";
 
-            console.log(a);
-
             if (a === "true") {
                 //console.log("여기 들어왔습니다.");
                 document
@@ -183,8 +184,44 @@
                     document.body.appendChild(form);
                     form.submit();
                 });
-            
             }
+
+
+            //쿠키 가져오는 스크립트.
+            function getCookie(name)
+            {
+                //문서에 존재하는 쿠키들 다 가져옴 == document.cookie; ex) phpid=123;cookiename=hosung; 
+                var cookie= document.cookie;
+               
+                if(document.cookie !=""){
+                    var cookie_array=cookie.split(";");
+                    for(var i in cookie_array){
+                        console.log(cookie_array[i]);
+                    }
+                    for(var index in cookie_array){
+                        var cookie_name = cookie_array[index].split("=");
+                        if(cookie_name[0]=="hosung"){
+                            console.log("여기 들어왔어요");
+                            return cookie_name[1];
+                        }
+                    }
+                   
+                }
+                return ;
+
+            }
+
+            function openPopup(url){
+                var cookieCheck= getCookie("hosung");
+                console.log()
+                if(cookieCheck != "N") {
+                    window.open(url, '', 'width=600,height=400,left=0,top=0')
+                } 
+            }
+
+    
+            openPopup('popup.html');
+
         </script>
     </body>
 </html>

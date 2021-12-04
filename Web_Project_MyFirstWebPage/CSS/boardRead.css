@@ -84,8 +84,8 @@
   text-align: center;
 }
 #content-image{
-  width: 20%;
-  height: 15%;
+  width: 30%;
+ 
   object-fit: contain;
 }
 .content{
@@ -95,6 +95,7 @@
 
 /* 댓글 관련 쪽 css*/
 
+/*  댓글 좋아요, 조회수,  */
 .bottom-comment{
     width: 100%;
     height: auto;
@@ -111,22 +112,103 @@
     padding: 5px;
 }
 
+/* 댓글 관련 css  */
 .comment{
-    background: #ccc;
+   
     margin: 5px;
     padding: 5px;
-    border-bottom: 1px solid #ccc;
+   
+}
+.reply-item{
+    border-bottom: 1px solid gray;
 }
 .comment>div{
     padding: 5px;
+}
+.comment-content{
+    border: none;
+    width: 100%;
+    height: 100px;
+    margin: 20px 5px 20px;
+}
+.comment-id{
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.comment-content-update{
+    display: none;
+    margin: 20px 5px 20px;
+    width: 90%;
+}
+.comment-update-button{
+   
+    
+    border: 1px solid black;
+    background: #ccc;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10%;
+    margin: 20px 5px 20px;
+    cursor: pointer;
+    display: none;
+    
+}
+.hidden-comment{
+    display: flex;
+    flex-direction: row;
 }
 .comment-time{
     display: flex;
     flex-direction: row;
 }
-.comment-time>div{
-  margin-right: 5px;
+.comment-time .right-item{
+  
+    display: flex;
+   margin-left: auto;
 }
+.right-item>div{
+    margin: 5px;
+}
+.comment-time>div{
+    color: #ccc;
+  margin-right: 5px;
+  font-size: 15px;
+}
+.comment-update,
+.comment-delete{
+    cursor: pointer;
+}
+
+#replyForm{
+    padding: 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+/* 댓글쓰는곳 */
+.comment-textarea{
+    
+    width: 90%;
+    border: 1px solid #D6D6D6; 
+    border-radius: 4px;
+    height: 100px;
+    
+}
+.comment-plus-button{
+    border: 1px solid black;
+    background: #ccc;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10%;
+    height: 100px;
+}
+
+
 .setting-image{
     background: #ccc;
     width: 20px;
