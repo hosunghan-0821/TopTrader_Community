@@ -2,6 +2,9 @@
      require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/dbConnect.php';
      require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/session.php';
      $date=date("Y-m-d H:i:s");
+     $date=$date.' (수정됨)';
+     
+     
      
      $db_connect=sqlCheck();
      $postData= json_decode(file_get_contents('php://input'));

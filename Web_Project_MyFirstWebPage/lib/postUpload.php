@@ -55,7 +55,7 @@ if($update=="false"){
         $fileType = $fileTypeExt[0];
         $fileExt = $fileTypeExt[1];
         $fileName=explode(".",$_FILES['imgFile']['name']);
-        $resFile="../RESOURCE/img/".$fileName[0]."_".$nowDate.".".$fileName[1];
+        $resFile="../RESOURCE/img/".$nowDate.".".$fileName[1];
         //$resFile ="../RESOURCE/img/{$_FILES['imgFile']['name']}".$nowDate;
         $imageupload=move_uploaded_file($tempFile,$resFile);
 
@@ -172,7 +172,7 @@ else{
 
 
         $fileName=explode(".",$_FILES['imgFile']['name']);
-        $resFile="../RESOURCE/img/".$fileName[0]."_".$nowDate.".".$fileName[1];
+        $resFile="../RESOURCE/img/".$nowDate.".".$fileName[1];
 
       
         //수정 된 이미지가 존재할 경우 업로드 시키고, 그 경로를 데이터베이스에 저장

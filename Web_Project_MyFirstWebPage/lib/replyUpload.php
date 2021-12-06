@@ -7,11 +7,14 @@
     $reply=$_POST['reply'];
     $scroll=$_POST['scroll'];
     $postNum=$_POST['postNum'];
-   
-    $sql="INSERT INTO PostReplyTable(Reply_Writer,Reply_Post_Num,Reply_Content) 
-    Values('$nickName','$postNum','$reply')";
+    $date=date("Y-m-d H:i:s");
+
+    $sql="INSERT INTO PostReplyTable(Reply_Writer,Reply_Post_Num,Reply_Content,Reply_Reg_Update) 
+    Values('$nickName','$postNum','$reply','$date')";
     $insertResult=mysqli_query($db_connect,$sql);
     if($insertResult){
+        $sql = "UPDATE PostTable SET Post_Reply_Num = Post_Reply_Num + 1 WHERE Post_Number='$postNum'";
+        mysqli_query($db_connect,$sql);
         header('location:../PHP/boardRead.php?num='.$postNum.'&scroll='.$scroll);
     }
     else{

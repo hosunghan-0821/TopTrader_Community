@@ -2,10 +2,40 @@
 
     require_once('../lib/session.php'); 
     require_once('../lib/dbConnect.php');
-    $db_connect = sqlCheck();
-
     header("Cache-Control: no-cache");
+
+    $db_connect = sqlCheck();
     $serialNum=$_GET['num'];
+
+     //쿠키확인해서 쿠키가 없으면  쿠키값에 serialNum 넣고  조회수 1 증가
+     //존재하면, 조회수 증가 x
+    if(!isset($_COOKIE['PostView'])){
+       
+        $sql = "UPDATE PostTable SET Post_View = Post_View + 1 WHERE Post_Number='$serialNum'";
+        mysqli_query($db_connect,$sql);
+        setcookie("PostView", "$serialNum", time() + 86400, '/');
+    }
+    else{
+        $checkCookie=false;
+        $viewCheck=$_COOKIE['PostView'];
+        $viewCheckArray=explode("-",$viewCheck);
+        for($i=0;$i<count($viewCheckArray);$i++){
+
+            if($viewCheckArray[$i]==$serialNum){
+                $checkCookie=true;
+                break;
+            }
+
+        }
+        if(!$checkCookie){
+            $sql = "UPDATE PostTable SET Post_View = Post_View + 1 WHERE Post_Number='$serialNum'";
+            mysqli_query($db_connect,$sql);
+            $viewCheck=$_COOKIE['PostView']."-".$serialNum;
+            setcookie("PostView", "$viewCheck", time() + 86400, '/');
+        }
+    }
+  
+  
     if(isset($_GET['scroll'])){
         $scroll=$_GET['scroll'];
     }
@@ -185,24 +215,31 @@
                         $replyContent=$replyData['Reply_Content'];
                         $replyContentPrint = str_replace("\r\n", "</br>", $replyContent);
                         $replyContentPrintJS = str_replace("\r\n", "\\n", $replyContent);
+                        if($replyData['Reply_Writer']==null){
+                            $writer ="탈퇴한 회원";
+                        }
+                        else{
+                            $writer=$replyData['Reply_Writer'];
+                        }
 
                     ?>
                     <div class="reply-item">
 
                         <div class="comment-id">닉네임 :
-                            <?php echo $replyData['Reply_Writer'] ?></div>
+                            <?php echo $writer; ?></div>
                         <div class="comment-time">
                             <div><?php echo $replyData['Reply_Reg_Update'] ?></div>
                             <div class="right-item">
 
                                 <div class="comment-update" onclick="replyUpdateFunction( '<?php  echo $replyData['Reply_Writer']; ?>',  '<?php echo $replyData['no']; ?>')"> 수정 </div>
                                 <div class="comment-delete" onclick="replyDeleteFunction('<?php  echo $replyData['Reply_Writer']; ?>', <?php echo $replyData['no']; ?>)">삭제</div>
+                                <div id="comment-cancel<?php echo $replyData['no']?>"class="comment-cancel" >수정취소</div>
                                 
                             </div>
                         </div>
                         <textarea id="comment-content<?php echo $replyData['no']?>" class="comment-content" disabled><?php echo  $replyContent; ?></textarea>
                         <div class="hidden-comment">
-                            <textarea id="comment-content-update<?php echo $replyData['no']?>" class ="comment-content-update" name="replyUpdate" id="" cols="30" rows="3"></textarea>
+                            <textarea id="comment-content-update<?php echo $replyData['no']?>" class ="comment-content-update" name="replyUpdate" id="" cols="30" rows="5"></textarea>
                             <div id="comment-update-button<?php echo $replyData['no'] ?>" class="comment-update-button"  >댓글수정</div>
                         </div>
                       
@@ -348,13 +385,17 @@
                     let commentContentId='comment-content'+replyNum;
                     let commentUpdateId='comment-content-update'+replyNum;
                     let commentupdateButtonId='comment-update-button'+replyNum;
-                    //console.log(commentUpdateId);
+                    let commentCancelButtonId='comment-cancel'+replyNum;
+                    
+                    //댓글 일련번호를 활용하여 , 각 해당하는 댓글 동적으로 활용
+                    let commentCancelButton=document.getElementById(commentCancelButtonId);
                     let commentNow = document.getElementById(commentContentId);
                     let commentUpdate= document.getElementById(commentUpdateId);
                     let commentUpdateButton =document.getElementById(commentupdateButtonId);
 
 
                     console.log(commentNow.innerText);
+                    commentCancelButton.style.display="block";
                     commentNow.style.display="none";
                     commentUpdate.style.display="block";
                     //br태그를 \\n 으로 바꿔줘야함. innerText를
@@ -362,6 +403,11 @@
                     commentUpdate.value=commentNow.innerText;
                    
                     commentUpdateButton.style.display="flex";
+
+                    // 수정취소시 reload 
+                    commentCancelButton.addEventListener('click',function(){
+                        location.reload();
+                    });
                     //수정하는 로직
                     commentUpdateButton.addEventListener('click',function(){
                         if(confirm("댓글 정말 수정하시겠습니까?")== true){
@@ -373,6 +419,7 @@
                             'Content-Type': 'application/json; charset=utf-8'
                             },
                             body: JSON.stringify({
+                               
                                 replyNum : replyNum,
                                 replyContent:commentUpdate.value
 
@@ -414,7 +461,12 @@
                             headers: {
                             'Content-Type': 'application/json; charset=utf-8'
                         },
-                        body: JSON.stringify({replyNum : replyNum})
+                        body: JSON.stringify({
+
+                            postNum  : "<?php echo $serialNum; ?>",
+                            replyNum : replyNum
+                        
+                        })
 
 
                         })

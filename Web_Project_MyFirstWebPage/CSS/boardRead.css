@@ -181,6 +181,10 @@
 .comment-delete{
     cursor: pointer;
 }
+.comment-cancel{
+    cursor: pointer;
+    display: none;
+}
 
 #replyForm{
     padding: 30px;

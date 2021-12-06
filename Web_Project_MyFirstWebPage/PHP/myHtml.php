@@ -1,13 +1,32 @@
 <?php
-    require_once('../lib/session.php');
 
+    include '/home/hosung/apache/Web_Project_MyFirstWebPage/lib/simple_html_dom.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/dbConnect.php';
+    require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/session.php';
+  
     if(!isset($_SESSION['nickName'])){
         $NickName="";
-
     }
     else{
         $NickName=$_SESSION['nickName'];
     }
+    
+     //인기 게시글 관련 데이터 뽑아오기 조회수 순서로 
+     $db_connect=sqlCheck();
+     $sql="SELECT * FROM PostTable ORDER BY Post_View DESC limit 0,5";
+
+    // 크롤링 관련해서 내가 원하는 정보만 뽑아와서 각 변수에 담기
+     //$chart_number_1= iconv("EUC-KR","UTF-8",  $chart_number_1); 글씨 깨질 때 사용
+    $data= file_get_html("https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101");
+    $chart = file_get_html("https://finance.naver.com/");
+    $chart_number=$chart->find("span.num_quot>span");
+
+
+    $chart_data = $chart->find("div.chart_area");
+    $kospiImg = $chart_data[0]->find("img",0)->src;
+    $kosdaqImg= $chart_data[1]->find("img",0)->src;
+  
+
 ?>
 
 <html lang="en">
@@ -72,28 +91,27 @@
 
                         <div class="kospi">
                             <div class="kospi-title">
-
+         
                                 <span>코스피</span>
-                                <span>3,000.81</span>
-                                <span>+1.28%
-                                </span>
+                                <span id="kospi-price"><?php echo $chart_number[0]; ?></span>
+                                <span id="kospi-volatility"><?php echo $chart_number[2]; ?></span>
 
                             </div>
-                            <div class="kospi-chart"></div>
+                            <img class="kospi-chart" src="<?= $kospiImg ?>" alt="../RESOURCE/img/HTTP 웹메소드 특징들표.png">
+                           
                         </div>
                         <div class="kosdaq">
                             <div class="kosdaq-title">
 
-                                <span>
-                                    코스닥</span>
-                                <span>
-                                    1,030.34</span>
-                                <span>
-                                    -1.11%
-                                </span>
+                                <span>코스닥</span>
+                                <span id="kosdaq-price"><?php echo $chart_number[4]; ?></span>
+                                <span id="kosdaq-volatility"><?php echo $chart_number[6]; ?></span>
 
                             </div>
-                            <div class="kosdaq-chart"></div>
+
+                           
+                            <img class="kosdaq-chart" src="<?= $kosdaqImg ?>" alt="../RESOURCE/img/HTTP 웹메소드 특징들표.png">
+                           
 
                         </div>
                     </div>
@@ -104,17 +122,25 @@
                     <div class="best-news">
 
                         <div class="best-news-title">
-                            실시간 핵심 뉴스
+                           경제 핵심 뉴스
                         </div>
 
                         <div class="news-content">
 
-                            <ol>뉴스1</ol>
-                            <ol>뉴스2</ol>
-                            <ol>뉴스3</ol>
-                            <ol>뉴스4</ol>
-                            <ol>뉴스5</ol>
+                          <?php 
+                            $newsArray= $data->find("div.cluster_text>a");
+                            $article= $data->find("div.cluster_text_press");
+                                for($i=0; $i<8; $i++){
+                          ?>
+                          <div class="news-item">
+                            <ul class="news-headline"> <?php echo $i+1 .".  ";  echo "$newsArray[$i]"; ?> </ul>
+                            <ul class="article-head"><?php echo "   " .$article[$i] ?></ul>
+                          </div>
+                        
 
+                          <?php 
+                                }
+                          ?>
                         </div>
 
                     </div>
@@ -126,31 +152,38 @@
                         </div>
 
                         <div class="post-content">
-                            <ol>글1</ol>
-                            <ol>글2</ol>
-                            <ol>글3</ol>
+                            <?php 
+
+                            $postSelectResult=mysqli_query($db_connect,$sql);
+                           while($bestPost=mysqli_fetch_array( $postSelectResult)){
+
+                          
+                            $title=$bestPost['Post_Title'];
+                            $viewPost=$bestPost['Post_View'];
+                            $replyPost=$bestPost['Post_Reply_Num'];
+                            $postNumber=$bestPost['Post_Number'];
+                
+                            ?>
+                            <div class="best-post-item">
+                                <div><a href="boardRead.php?num=<?php echo $postNumber?>"><?= $title."[".$replyPost."]" ?> </a></div>
+                                <div class="best-post-view"><?= "조회수 ".$viewPost?> </div>
+                            </div>
+                            <?php 
+                             }
+                            ?>
+                        
                         </div>
                     </div>
 
                 </div>
 
             </div>
-            <div class="sidebar">
+            <!-- <div class="sidebar">
                 <div class="sidebar-title">
                     등락률 상위
                 </div>
 
-            </div>
-            <!-- <div class="information"> <div class="information-item"> <div
-            class="information-item-title"> 핵심뉴스 <div class="image"> <img src="./news.jpg"
-            alt="" style="max-width: 90%; height: auto;"> </div> </div> </div> <div
-            class="information-item"> <div class="information-item-title"> 매매일지 <div
-            class="image"> <img src="./RESOURCE/record.jpg" alt="" style="max-width: 90%;
-            height: auto;"> </div> </div> </div> <div class="information-item"> <div
-            class="information-item-title"> 자유게시판 <div class="image"> <img
-            src="./notice.jpg" alt="" style="max-width: 90%; height: auto;"> </div> </div>
-            </div> </div> -->
-
+            </div> -->
         </div>
 
         <footer>footer</footer>
@@ -218,10 +251,37 @@
                     window.open(url, '', 'width=600,height=400,left=0,top=0')
                 } 
             }
-
-    
             openPopup('popup.html');
 
+            //상승 하락에 따른 글씨 색깔 바꿔주기.
+            let kospiPrice= document.getElementById("kospi-price").firstChild;
+            let kospiVol= document.getElementById("kospi-volatility").firstChild;
+            let kosdaqPrice= document.getElementById("kosdaq-price").firstChild;
+            let kosdaqVol= document.getElementById("kosdaq-volatility").firstChild;
+            let kospiCheck=kospiVol.innerText.substring(0,1);
+            let kosdaqCheck=kosdaqVol.innerText.substring(0,1);
+
+            if( kospiCheck== '+'){
+                kospiPrice.style.color="red";
+                kospiVol.style.color="red";
+            }
+            else{
+                kospiPrice.style.color="blue";
+                kospiVol.style.color="blue";
+            }
+            
+            if( kosdaqCheck== '+'){
+               
+               kosdaqPrice.style.color="red";
+               kosdaqVol.style.color="red";
+           }
+           else{
+               kosdaqPrice.style.color="blue";
+               kosdaqVol.style.color="blue";
+
+           }
+
         </script>
+
     </body>
 </html>

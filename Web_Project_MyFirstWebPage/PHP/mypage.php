@@ -4,17 +4,26 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/session.php';
     header("Cache-Control: no-cache");
     $db_connect=sqlCheck();
-    $nickName=$_POST['nickName'];
+    $nickName=$_SESSION['nickName'];
     $ID=$_SESSION['ID'];
 
-    //회원정보를 가져오기 위해 사용하는 sql 문
-    // $sql = "SELECT * FROM CommunityMember WHERE(Member_ID = '$ID')";
+    
+
+  
 
     //회원정보 랑 join 해서 게시글 정보까지 한번에 가져오는 sql 문
-    $sql = "SELECT * FROM CommunityMember inner join PostTable on CommunityMember.Member_NickName=PostTable.Post_Writer WHERE(Member_ID = '$ID')";
+    //이 sql 문은 글이 하나도 없을 때 회원정보를 못가져오는 버그가 존재한다..
+    //$sql = "SELECT * FROM CommunityMember inner join PostTable on CommunityMember.Member_NickName=PostTable.Post_Writer WHERE(Member_ID = '$ID')";
+    
+    //회원정보를 가져오기 위해 사용하는 sql 문
+    $sql = "SELECT * FROM CommunityMember WHERE(Member_ID = '$ID')";
     $select_result=mysqli_query($db_connect,$sql);
-    $select_resultRe=mysqli_query($db_connect,$sql);
-    $Data=mysqli_fetch_array($select_result)
+    $Data=mysqli_fetch_array($select_result);
+
+    //회원 게시글을 가져오기 위해 사용하는 sql 문
+    $postSql="SELECT * FROM PostTable Where(Post_Writer='$nickName')";
+    $postSelectResult=mysqli_query($db_connect,$postSql);
+   
 
 
 ?>
@@ -101,7 +110,7 @@
 
                    
                         <?php 
-                         while($Post_Data = mysqli_fetch_array($select_resultRe))
+                         while($Post_Data = mysqli_fetch_array($postSelectResult))
                          {
                              $title=$Post_Data['Post_Title'];
                              $post_date=$Post_Data['Post_Date'];
@@ -218,6 +227,7 @@
                                             case 'true':
                                                 {
                                                   alert("닉네임 변경되었습니다.");
+ 
                                                   break;
                                             
                                                 }
