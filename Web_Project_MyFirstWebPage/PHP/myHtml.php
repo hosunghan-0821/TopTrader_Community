@@ -39,10 +39,6 @@
         <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
             rel="stylesheet">
-        <script>
-
-          
-        </script>
     </head>
     <body>
 
@@ -59,8 +55,11 @@
             </div>
 
             <span class="search">
-                <input type="text" class="search_box" placeholder="종목명 입력">
-                <img src="../RESOURCE/img/search_image2.png" class="search-image">
+
+                <form id="searchForm" action="../PHP/stockSearch.php" method="get">
+                <input id="searchKeyword" name="keyword"type="text" class="search_box" placeholder="종목명 입력">
+                </form>
+                <img src="../RESOURCE/img/search_image2.png" class="search-image" onclick="stockSearch()">
             </span>
 
             <div class="nav-right-items">
@@ -139,7 +138,7 @@
                         
 
                           <?php 
-                                }
+                               }
                           ?>
                         </div>
 
@@ -278,7 +277,19 @@
            else{
                kosdaqPrice.style.color="blue";
                kosdaqVol.style.color="blue";
+           }
 
+           function stockSearch(){
+               let searchForm=document.getElementById("searchForm");
+               let searchKeyword=document.getElementById("searchKeyword");
+
+               if(searchKeyword.value!=""){
+                   searchForm.submit();
+               }
+               else{
+                   alert("검색어를 입력하세요");
+                   searchKeyword.focus();
+               }
            }
 
         </script>

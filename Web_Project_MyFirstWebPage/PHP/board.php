@@ -1,14 +1,18 @@
 <?php
-
-
+     //게시글 관련 파일
+   
     require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/dbConnect.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/session.php';
     header("Cache-Control: no-cache");
     $db_connect=sqlCheck();
     
+    //게시글 글쓴이, 제목을 갖고 search 하기위해서 넘어온 정보에 따라  query 해서 정보를 뿌려주기
+
     if(isset($_POST['search-category'])){
        $searchCategory=$_POST['search-category'];
        $searchText=$_POST['search-text'];
+
+       //제목일 경우, 작성자일 경우 나눠서 query
        if($searchCategory=="제목"){
            $select_query="SELECT * FROM PostTable WHERE Post_Title LIKE '%$searchText%' ORDER BY Post_date desc";
        }
@@ -22,7 +26,6 @@
 
     $select_result=mysqli_query($db_connect,$select_query);
 
-//$num=mysqli_num_rows($select_result);
 ?>
 
 <!DOCTYPE html>
@@ -197,7 +200,7 @@
 
         <script>
 
-            //bottom search 관련 자바스크립트
+            //bottom search 관련 자바스크립트 [검색 관련 스크립트]
             let searchCategory = document.getElementById("search-category");
             let searchText = document.getElementById("search-text");
             let searchButton = document.getElementById("bottom-search-button");
@@ -205,7 +208,7 @@
 
             searchButton.addEventListener('click', function (e) {
                 if (searchText.value == "") {
-                    console.log("456")
+                   
                     searchText.focus()
                     return false;
                 } else {
@@ -242,16 +245,9 @@
                
                  document.location.href = 'boardStandardWrite.php';
             }
-            function readFunction() {
+            // function readFunction() {
 
-                // const request = new XMLHttpRequest(); var name = document
-                // .getElementById("num")     .innerText; console.log(name);
-                // request.onreadystatechange = function () {     if (request.readyState == 4 &&
-                // request.status == 200) {         window.location.href = request.responseURL;
-                // } } const myurl = './boardRead.php?num=' + name; request.open('GET', myurl,
-                // true); request.send();
-
-            }
+            // }
         </script>
 
     </body>

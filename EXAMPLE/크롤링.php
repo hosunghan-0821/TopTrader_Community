@@ -23,18 +23,18 @@
             $data= file_get_html("https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101");
             $chart= file_get_html("https://finance.naver.com/");
             
+            echo $chart;
+            // $chart_number=$chart->find("span.num_quot>span");
+            // // $chart_data_change= iconv("EUC-KR","UTF-8",  $chart_number[0]); 
+            // // echo $chart_data_change;
 
-            $chart_number=$chart->find("span.num_quot>span");
-            // $chart_data_change= iconv("EUC-KR","UTF-8",  $chart_number[0]); 
-            // echo $chart_data_change;
 
 
-
-            foreach($chart_number as $number){
-                $chart_data_change= iconv("EUC-KR","UTF-8", $number); 
-                echo $chart_data_change;
-                echo "</br>";
-            }
+            // foreach($chart_number as $number){
+            //     $chart_data_change= iconv("EUC-KR","UTF-8", $number); 
+            //     echo $chart_data_change;
+            //     echo "</br>";
+            // }
 
             // foreach( $chart->find("div.chart_area") as $chart_data){
             //     $chart_data_change= iconv("EUC-KR","UTF-8", $chart_data); 
@@ -80,6 +80,7 @@
         
 
 ?>
+
 
     </body>
 </html>

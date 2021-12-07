@@ -3,8 +3,6 @@
 // 참고 https://developers.naver.com/docs/search/news/
 // 사용법 naverSearchAPI(검색어, 정렬, 한페이지에 보여줄 개수, 검색 시작 위치);
 
-
-
 $ch = curl_init();
 function naverNewsResult($query='', $sort='', $display=0, $start=0) {
  
@@ -40,11 +38,23 @@ function naverNewsResult($query='', $sort='', $display=0, $start=0) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $result = curl_exec($ch);
     curl_close($ch);
- 
-    return $result;
+
+    $json_result=json_decode($result);
+
+    $json_item = $json_result->{'items'};
+//     foreach($json_item as $item){
+//        echo $item->{'title'};
+//        echo $item->{'originallink'};
+//        echo "</br>";
+//        //    echo $item->{'pubDate'};
+//        $date=date_create($item->{'pubDate'});
+//         echo date_format($date,"Y/m/d H:i:s");
+//        echo "</br>";
+//    }
+     return $json_item;  
 }
 
-echo naverNewsResult('운동', 'date', 5);
+    // naverNewsResult('삼성전자', 'sim', 5);
 
 ?>
 

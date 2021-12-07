@@ -7,14 +7,18 @@
     $db_connect = sqlCheck();
     $serialNum=$_GET['num'];
 
-     //쿠키확인해서 쿠키가 없으면  쿠키값에 serialNum 넣고  조회수 1 증가
-     //존재하면, 조회수 증가 x
+   
+     //쿠키 관련 코드
+
+     //쿠키가 아예 없을 경우  새로 쿠키를 만들고, 안에 읽은 게시글 정보 기입
     if(!isset($_COOKIE['PostView'])){
        
         $sql = "UPDATE PostTable SET Post_View = Post_View + 1 WHERE Post_Number='$serialNum'";
         mysqli_query($db_connect,$sql);
         setcookie("PostView", "$serialNum", time() + 86400, '/');
     }
+
+    //존재하면, 현재 읽는 페이지가 쿠키 value에 있는지 확인하고, 있으면, 조회수 증가x
     else{
         $checkCookie=false;
         $viewCheck=$_COOKIE['PostView'];
@@ -27,6 +31,8 @@
             }
 
         }
+
+        //쿠키에 읽는 페이지의 정보가 있는지 확인! 없으면 추가
         if(!$checkCookie){
             $sql = "UPDATE PostTable SET Post_View = Post_View + 1 WHERE Post_Number='$serialNum'";
             mysqli_query($db_connect,$sql);
@@ -74,6 +80,7 @@
              }
         }
     }
+    // query에서 가져온 정보들을 _이제 사용할 변수들 
     $date=$Data['Post_Date'];
     $imageRoute=$Data['Post_Image_Route'];
     $content=$Data['Post_Content'];
@@ -273,6 +280,7 @@
 
         <!-- 이 스크립트는 updateFunction & deleteFunction 관련한 스크립트 -->
         <script>
+            
             let updateButton = document.getElementById('post-update');
             let deleteButton = document.getElementById('post-delete');
             if ('<?php echo $postHost ?>' == "false") {
@@ -281,6 +289,7 @@
                 deleteButton.style.display = "none";
             }
 
+            //게시글 수정
             function updateFunction() {
 
                 let form = document.createElement('form');
@@ -297,6 +306,8 @@
                     .appendChild(form);
                 form.submit();
             }
+
+            //게시글 삭제
             function deleteFunction() {
 
                 if (confirm("정말 삭제하시겠습니까?") == true) {
@@ -378,7 +389,7 @@
                 replyForm.submit();
             }
             
-
+            //댓글 수정하는 함수
             function replyUpdateFunction(replyWriter,replyNum){
               
                 if(replyWriter==="<?php echo $nickName; ?>"){
@@ -447,7 +458,7 @@
                 }
             }
           
-            
+            //댓글 삭제하는 함수
             function replyDeleteFunction(replyWriter,replyNum){
 
                 if(replyWriter==="<?php echo $nickName; ?>"){
@@ -486,6 +497,7 @@
                     alert("자신이 작성한 글만 삭제 가능합니다.");
                 }
             }
+            
         </script>
 
     </body>
