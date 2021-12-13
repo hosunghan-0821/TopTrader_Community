@@ -111,6 +111,8 @@ a{
     text-align: center;
 }
 .paging a{
+    cursor: pointer;
+    margin: 5px;
     display: inline-block;
     vertical-align: middle;
     border-radius: 100px;
@@ -118,25 +120,25 @@ a{
 .paging a.first,
 .paging a.previous
 {
-    width: 40px;
-    height: 40px;
-    background-color: #999 ;
-    background-image: url(../RESOURCE/img/페이징_이미지.jpg) ;
-    background-repeat: no-repeat;
+    /* width: 40px;
+    height: 40px; */
+    /* background-color: #999 ; */
+    /* background-image: url(../RESOURCE/img/페이징_이미지.jpg) ; */
+    /* background-repeat: no-repeat;
     text-indent: -1000px;
-    overflow: hidden;
+    overflow: hidden; */
 }
 
 .paging a.next,.paging a.last{
-    width: 40px;
-    height: 40px;
-    background-color: #999 ;
-    background-image: url(../RESOURCE/img/페이징_이미지_2.jpg);
-    background-repeat: no-repeat;
+    /* width: 40px;
+    height: 40px; */
+    /* background-color: #999 ; */
+    /* background-image: url(../RESOURCE/img/페이징_이미지_2.jpg); */
+    /* background-repeat: no-repeat;
     text-indent: -1000px;
-    overflow: hidden;
+    overflow: hidden; */
 }
-.paging a.first{
+/* .paging a.first{
     background-position: -341px -288px;
 }
 .paging a.previous{
@@ -147,7 +149,7 @@ a{
 }
 .paging a.last{
     background-position: -69px -16px;
-}
+} */
 .paging >div.write{
   
     display: inline;

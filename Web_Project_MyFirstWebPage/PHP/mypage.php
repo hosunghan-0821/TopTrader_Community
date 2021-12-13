@@ -9,7 +9,34 @@
 
     
 
-  
+    //회원글 paging 하기위해서 짜는 로직
+    if(isset($_GET['page'])){
+        $page=$_GET['page'];
+    }
+    else{
+        $page=1;
+    }
+
+    //회원 게시글을 가져오기 위해 사용하는 sql 문
+    $postSql="SELECT * FROM PostTable Where(Post_Writer='$nickName')";
+    $postSelectResult=mysqli_query($db_connect,$postSql);
+    $totalPostNumber = mysqli_num_rows($postSelectResult);
+
+    //총 회원글의 갯수를 구한후, paging 로직을 위한 변수 설정
+    $list=5;
+    $blockCnt=5;
+    $blockNum= ceil($page/$blockCnt);
+    $blockStart= (($blockNum-1)*$blockCnt)+1;
+    $blockEnd=$blockStart+$blockCnt-1;
+    $totalPage =ceil($totalPostNumber/$list);
+    if($blockEnd>$totalPage){
+        $blockEnd=$totalPage;
+    }
+    $pageStart = ($page-1)*$list;
+
+    //로직에 맞춰서 해당 게시글 가져오는 sql 문
+    $postSql="SELECT * FROM PostTable WHERE(Post_Writer='$nickName') ORDER BY Post_date desc LIMIT $pageStart,$list " ;
+    $postSelectResult=mysqli_query($db_connect,$postSql);
 
     //회원정보 랑 join 해서 게시글 정보까지 한번에 가져오는 sql 문
     //이 sql 문은 글이 하나도 없을 때 회원정보를 못가져오는 버그가 존재한다..
@@ -20,9 +47,7 @@
     $select_result=mysqli_query($db_connect,$sql);
     $Data=mysqli_fetch_array($select_result);
 
-    //회원 게시글을 가져오기 위해 사용하는 sql 문
-    $postSql="SELECT * FROM PostTable Where(Post_Writer='$nickName')";
-    $postSelectResult=mysqli_query($db_connect,$postSql);
+   
    
 
 
@@ -118,7 +143,6 @@
                              $post_num=$Post_Data['Post_Number'];
                              //$date[0] : 날짜 
                              //$date[1] : 시간
-                    
                         ?>
                         <div class="post-content">
 
@@ -129,6 +153,42 @@
                          }
                         ?>
 
+                    <div class="paging">
+                        <?php 
+                        if($totalPostNumber!=0){
+                            if($page>1){
+                                $pre =$page -1;
+                            }
+                            else{
+                                $pre=1;
+                            }
+                            echo"<a href='mypage.php?page=1' class='paging-order'>처음</a>";
+                            echo"<a href='mypage.php?page=$pre'  class='paging-order'>이전</a>";
+
+                            for($i=$blockStart;$i<=$blockEnd;$i++){
+                                if($i==$page){
+                                    echo "<b> $i </b>";
+                                }
+                                else{
+                                    echo"<a href='mypage.php?page=$i' class='paging-num'>$i</a>";
+                                }
+                            }
+                            if($page<$totalPage){
+                                $next=$page+1;
+                            }
+                            else{
+                                $next=$totalPage;
+                            }
+                            echo "<a href='mypage.php?page=$next'  class='paging-order'>다음</a>";
+                            echo "<a href='mypage.php?page=$totalPage'  class='paging-order'>   마지막</a>";
+
+                        }
+                        
+                        ?>
+
+
+                    </div>
+
                     
                 </div>
 
@@ -136,12 +196,21 @@
     </div>
 
     <script>
+        let passwordChange=document.getElementById('passwordChange');
         let memberOut=document.getElementById('memberOut');
-        let passwordChange = document.getElementById('nickNameChange');
+        let nickNameChange = document.getElementById('nickNameChange');
         let changeInput = document.getElementById('changeInput');
         let nickName = document.getElementById('member-nickname');
         let outButton = document.getElementById('outButton');
         nickName.value = '<?php echo $Data['Member_NickName']; ?>';
+
+        passwordChange.addEventListener('click',function(e){
+            console.log(123);
+            let check= confirm("비밀번호 변경 하시겠습니까?");
+            if(check){
+                location.href="passwordChange.html";
+            }
+        });
 
 
         memberOut.addEventListener('click',function(e){
@@ -186,7 +255,7 @@
         });
 
         //여기는 닉네임 바꾸는 이벤트
-        passwordChange.addEventListener('click', function (e) {
+        nickNameChange.addEventListener('click', function (e) {
             nickName.focus();
 
             if (nickName.value === '<?php echo $Data['Member_NickName']; ?>') {
@@ -227,7 +296,7 @@
                                             case 'true':
                                                 {
                                                   alert("닉네임 변경되었습니다.");
- 
+                                                  location.reload();
                                                   break;
                                             
                                                 }

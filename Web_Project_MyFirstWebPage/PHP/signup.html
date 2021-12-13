@@ -64,6 +64,7 @@
                                 value="중복확인"
                                 onclick="nickNameCheckFunction()">
                         </span>
+                        
                         <span class="error_nickName" id="error_nickName"></span>
                     </div>
 
@@ -79,8 +80,20 @@
                                 value="이메일 인증"
                                 onclick="emailCheckFunction()">
                         </span>
-
+                     
+                     
+                      
                     </div>
+                    <span class="box int_email_verify" id="email-verify">
+                        <input type="text" class="int" id="email-verify-input">
+                        <input
+
+                                type="button"
+                                class="emailCheck"
+                                value="인증번호 확인"
+                                onclick="verifyNumberCheck()">
+                    </span>
+                    <span class="error_email" id="error_email"></span>
 
                     <div class="btn-area">
                         <button type="button" onclick="join()">
@@ -94,10 +107,17 @@
             </div>
 
             <script>
+                var emailValidNumber="";
+                var emailValid = false;
                 var nickNameValid = false;
                 var passwordValid = false;
                 var idValid = false;
                 var valid = false;
+
+                let emailInput=document.getElementById('email-verify');
+                let emailInputNumber=document.getElementById('email-verify-input');
+                let errorEmail=document.getElementById('error_email');
+
                 var id = document.getElementById("id");
                 var password = document.getElementById("password");
                 var passwordCheck = document.getElementById("passwordCheck");
@@ -141,7 +161,7 @@
                     if (valid == false) {
                         return false;
                     }
-                    if (idValid == false || passwordValid == false || nickNameValid == false) {
+                    if (idValid == false || passwordValid == false || nickNameValid == false || emailValid ==false) {
 
                         if (passwordValid == false) {
                             passwordCheck.focus();
@@ -153,6 +173,10 @@
                         }
                         if (nickNameValid == false) {
                             nickName.focus();
+                            return false;
+                        }
+                        if(emailValid==false){
+                            alert("인증번호를 확인하세요");
                             return false;
                         }
 
@@ -308,6 +332,7 @@
 
                 }
 
+                //이메일 자바스크립트 정규식으로 제대로 입력했는지 확인
                 function emailCheckFunction() {
                     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -318,7 +343,48 @@
                         alert("올바른 이메일 주소를 입력하세요")
                         return false;
                     }
+                    else{
+                      
+                        emailInput.style.display="inline-flex";
+                    
+                        fetch("../lib/emailVerifyCheck.php",{
+                            method: 'POST',
+                            cache: 'no-cache',
+                            headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                            },
+                             body: JSON.stringify({email: email})
+
+                        })
+                        .then((res)=>res.text())
+                        .then((data)=>{
+                            if(data!="false"){
+                                emailValidNumber=data;
+                              
+                            }
+                            else{
+                                emailValidNumber="fail";
+                                console.log("메일 전송 실패");
+                            }
+
+                        })
+
+                    }
                 }
+
+            function verifyNumberCheck() {
+
+                        if (emailValidNumber == emailInputNumber.value) {
+                            errorEmail.innerText = "인증완료";
+                            errorEmail.style.color = "blue";
+                            emailValid = true;
+                        } else {
+                            errorEmail.innerText = "인증실패";
+                            errorEmail.style.color = "red";
+                            emailValid = false;
+                        }
+
+                    }
             </script>
         </body>
     </html>

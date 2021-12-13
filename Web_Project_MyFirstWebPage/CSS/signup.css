@@ -66,6 +66,11 @@ h3 {
 .error_passwordCheck{
     float: right;
 }
+.box.int_email_verify{
+    display: none;
+    margin-top: 25px;
+}
+
 .btn-area{
     margin: 50px;
 }

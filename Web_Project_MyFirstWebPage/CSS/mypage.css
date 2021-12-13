@@ -160,4 +160,14 @@
 .post-content-date{
    width: 30%;
 }
-
+.paging{
+    text-align: center;
+    margin-top: 50px;
+    width: 100%;
+}
+.paging-num{
+    margin: 5px;
+}
+.paging-order{
+    margin: 5px;
+}

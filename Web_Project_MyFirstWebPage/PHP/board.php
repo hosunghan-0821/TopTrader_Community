@@ -5,7 +5,64 @@
     require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/session.php';
     header("Cache-Control: no-cache");
     $db_connect=sqlCheck();
+
+    //paging 처리를 위한 코드 
     
+    if(isset($_POST['page'])){
+        $page = $_POST['page'];
+    }
+    else{
+        $page=1;
+    }
+
+    if(isset($_POST['search-category'])){
+        $searchCategory=$_POST['search-category'];
+        $searchText=$_POST['search-text'];
+        if($searchCategory=="제목"){
+          
+            $sqlBoard="SELECT * FROM PostTable where Post_Title LIKE '%$searchText%' ";
+        }
+        else if ($searchCategory=="작성자"){
+            $sqlBoard="SELECT * FROM PostTable  WHERE (Post_Writer='$searchText' ) ";
+        }
+    }
+    else{
+        $searchCategory="null";
+        $searchText="null";
+        $sqlBoard="SELECT * FROM PostTable";
+    }
+    
+    $boardResult = mysqli_query($db_connect,$sqlBoard);
+    
+    // 게시글 총 갯수
+    $totalPostNumber =mysqli_num_rows($boardResult);
+
+    //내가 한 페이지당 몇개씩 보여줄 것인가?
+    $list = 5;
+    $blockCnt=5;
+    //현재 페이지 블록
+    $blockNum=ceil($page/$blockCnt);
+    //블록 시작 숫자
+    $blockStart=(($blockNum-1)*$blockCnt)+1;
+    //블록 마지막
+    $blockEnd=$blockStart+$blockCnt-1;
+
+    // 총 게시글 / 리스트 갯수 = 총 페이지 갯수
+    $totalPage= ceil($totalPostNumber/$list);
+
+    // 전체 페이지보다 현재 블록 end가 크다면,  
+    //마지막 page는 현재 block end값.
+    if($blockEnd>$totalPage){
+        $blockEnd=$totalPage;
+    }
+    $totalBlock= ceil($totalPage/$blockCnt);
+    $pageStart = ($page-1)*$list;
+
+    //여기까지 GET으로 부턴 Page를 갖고 필요한 변수들 정의 한 부분.
+    //$sqlPage="SELECT * FROM PostTable ORDER BY Post_Date DESC Limit $pageStart,$list";
+    
+
+
     //게시글 글쓴이, 제목을 갖고 search 하기위해서 넘어온 정보에 따라  query 해서 정보를 뿌려주기
 
     if(isset($_POST['search-category'])){
@@ -14,17 +71,21 @@
 
        //제목일 경우, 작성자일 경우 나눠서 query
        if($searchCategory=="제목"){
-           $select_query="SELECT * FROM PostTable WHERE Post_Title LIKE '%$searchText%' ORDER BY Post_date desc";
+           //$select_query="SELECT * FROM PostTable WHERE Post_Title LIKE '%$searchText%' ORDER BY Post_date desc ";
+           $sqlPage="SELECT * FROM PostTable WHERE Post_Title LIKE '%$searchText%' ORDER BY Post_date desc Limit $pageStart,$list ";
        }
        else if($searchCategory=="작성자"){
-           $select_query="SELECT * FROM PostTable WHERE (Post_Writer='$searchText' ) ORDER BY Post_date desc";
+           //$select_query="SELECT * FROM PostTable WHERE (Post_Writer='$searchText' ) ORDER BY Post_date desc";
+           $sqlPage="SELECT * FROM PostTable WHERE (Post_Writer='$searchText' ) ORDER BY Post_date desc Limit $pageStart,$list";
        }
     }
     else{
-        $select_query = "SELECT Post_Writer,Post_Number,Post_Title,Post_Like,Post_View,Post_Date from PostTable ORDER BY Post_date desc " ;
+        //$select_query = "SELECT Post_Writer,Post_Number,Post_Title,Post_Like,Post_View,Post_Date from PostTable ORDER BY Post_date desc " ;
+        $sqlPage="SELECT * FROM PostTable ORDER BY Post_Date DESC Limit $pageStart,$list";
     }
 
-    $select_result=mysqli_query($db_connect,$select_query);
+    $select_result=mysqli_query($db_connect,$sqlPage);
+
 
 ?>
 
@@ -95,7 +156,8 @@
                 <div class="board-list-body" id="postBody">
 
                 <?php
-
+                    //위에서 query한 정보로 순서대로 뿌려주는 코드 
+                    
                     while($Data = mysqli_fetch_array($select_result))
                     {
 
@@ -138,28 +200,58 @@
 
             </div>
 
+      
             <div class="paging">
-                <a href="#" class="first">
-                    처음 페이지
-                </a>
-                <a href="#" class="previous">
-                    이전 페이지
-                </a>
-                <a href="#" class="num">
-                    1
-                </a>
-                <a href="#" class="num">
-                    2
-                </a>
-                <a href="#" class="num">
-                    3
-                </a>
-                <a href="#" class="next">
-                    다음 페이지
-                </a>
-                <a href="#" class="last">
-                    마지막 페이지
-                </a>
+
+                 <?php 
+                
+                    if( $totalPostNumber !=0 ){
+
+                        if($page>1){
+                            $pre =$page-1;
+                        }
+                        else{
+                            $pre=1;
+                        }
+                       
+                        echo"<a onclick='pageChange(1)' class='first'> 처음</a>"; 
+                        // echo"<a href='board.php?page=1' class='first'> 처음</a>"; 
+                        echo"<a onclick='pageChange($pre)' class='previous'> 이전 </a>";
+                        // echo"<a href='board.php?page=$pre' class='previous'> 이전 </a>";
+                    }
+                  
+                ?>
+                
+                <?php 
+                    for($i= $blockStart; $i<=$blockEnd;$i++){
+
+                        if($page ==$i){
+                            echo "<b> $i </b>";
+                        }
+                        else{
+                            // echo "<a href='board.php?page=$i' class='num'>$i</a>";
+                            echo "<a onclick='pageChange($i)'>$i</a>";
+                        }
+                    }
+                ?>
+
+                <?php
+                    if($totalPostNumber!==0){
+
+                        if($page<$totalPage){
+                            $next=$page+1;
+                        }
+                        else{
+                            $next=$totalPage;
+                        }
+                        echo "<a onclick='pageChange($next)'> 다음</a>";
+                        // echo "<a href='board.php?page=$next'> 다음</a>";
+                        echo "<a onclick='pageChange($totalPage)'> 마지막</a>";
+                        //echo "<a href='board.php?page=$totalPage'> 마지막</a>";
+                    }
+                
+                ?>
+
                 <div class="write" onclick="writeFunction()">
                     글쓰기
                 </div>
@@ -200,11 +292,69 @@
 
         <script>
 
+
+
             //bottom search 관련 자바스크립트 [검색 관련 스크립트]
+           
             let searchCategory = document.getElementById("search-category");
             let searchText = document.getElementById("search-text");
             let searchButton = document.getElementById("bottom-search-button");
             let searchForm = document.getElementById("search-form");
+
+        
+            
+            if("<?php echo $searchCategory;?>" != "null"){
+                if("<?php echo $searchCategory; ?>" == "제목"){
+                    searchCategory.value="제목";
+                }
+                else{
+                    searchCategory.value="작성자";
+                }
+                searchText.value="<?php echo $searchText; ?>";
+              
+            }
+            else{
+                console.log("456");
+            }
+
+
+            // 만들어진 페이징 링크를 누를 때, 검색 정보가 있을 경우 같이 정보전달 하기위해 form만들어서 전달
+          
+            function pageChange(pageNum){
+
+          
+                console.log(pageNum);
+                var obj= {
+                    page : pageNum
+                };
+                //넘겨야 할 것들 page 번호, 검색종류, 검색어 
+                if("<?php echo $searchCategory;?>" != "null"){
+
+                    if("<?php echo $searchCategory; ?>" == "제목"){
+                        obj["search-category"] = "제목";
+                    }
+                    else{
+                        obj["search-category"]="작성자";
+                    }
+                  obj["search-text"]=searchText.value;
+                }
+
+            
+             
+                let form = document.createElement('form');
+                form.setAttribute('method', 'post');
+                form.setAttribute('action', '../PHP/board.php');
+                for (var key in obj){
+                    var hiddenField = document.createElement('input');
+                    hiddenField.setAttribute('type', 'hidden');
+                    hiddenField.setAttribute('name', key);
+                    hiddenField.setAttribute('value', obj[key]);
+                    form.appendChild(hiddenField);
+                }
+                document.body.appendChild(form);
+                form.submit();
+
+            }
 
             searchButton.addEventListener('click', function (e) {
                 if (searchText.value == "") {

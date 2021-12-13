@@ -1,5 +1,7 @@
 <?php
 
+    // 크롤링을 위한 include
+    //데이터베이스, 세션 접근을 위한 require
     include '/home/hosung/apache/Web_Project_MyFirstWebPage/lib/simple_html_dom.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/dbConnect.php';
     require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/session.php';
@@ -16,6 +18,7 @@
      $sql="SELECT * FROM PostTable ORDER BY Post_View DESC limit 0,5";
 
     // 크롤링 관련해서 내가 원하는 정보만 뽑아와서 각 변수에 담기
+
      //$chart_number_1= iconv("EUC-KR","UTF-8",  $chart_number_1); 글씨 깨질 때 사용
     $data= file_get_html("https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101");
     $chart = file_get_html("https://finance.naver.com/");
@@ -57,7 +60,7 @@
             <span class="search">
 
                 <form id="searchForm" action="../PHP/stockSearch.php" method="get">
-                <input id="searchKeyword" name="keyword"type="text" class="search_box" placeholder="종목명 입력">
+                <input id="searchKeyword" name="keyword"type="text" class="search_box" placeholder="종목 뉴스 검색">
                 </form>
                 <img src="../RESOURCE/img/search_image2.png" class="search-image" onclick="stockSearch()">
             </span>
@@ -188,11 +191,10 @@
         <footer>footer</footer>
 
         <script>
-
+            //로그인 관련 스킄립트
             var a = "<?php echo  $loginCheck; ?>";
 
             if (a === "true") {
-                //console.log("여기 들어왔습니다.");
                 document
                     .getElementById("loginCheck")
                     .innerText = "로그아웃";

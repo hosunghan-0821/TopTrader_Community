@@ -187,9 +187,9 @@
             <div class="bottom-comment">
 
                 <div class="comment-head">
-                    <div>좋아요 :
-                        <?php echo $Data['Post_Like'] ?>
-                    </div>
+                    <!-- <div>좋아요 :
+                       
+                    </div> -->
                     <div>조회수 :
                         <?php echo $Data['Post_View'] ?>
                     </div>
