@@ -83,6 +83,7 @@
     // query에서 가져온 정보들을 _이제 사용할 변수들 
     $date=$Data['Post_Date'];
     $imageRoute=$Data['Post_Image_Route'];
+    $imageRouteExplode=explode("-",$imageRoute);
     $content=$Data['Post_Content'];
     $title=$Data['Post_Title'];
     $dateTime=explode(" ",$date);
@@ -152,6 +153,7 @@
                     </div>
 
                 </div>
+                
                 <div class="write-date">
 
                     <div class="write-data">
@@ -170,12 +172,37 @@
                     <div class="write-border"></div>
                 </div>
 
+                <div class="bottom-function">
+
+                <span
+                    id="post-update"
+                    class="bottom-function-update"
+                    onclick="updateFunction()">
+                    게시글 수정
+                </span>
+                <span
+                    id="post-delete"
+                    class="bottom-function-delete"
+                    onclick="deleteFunction()">
+                    게시글 삭제
+                </span>
+
+                </div>
+
             </div>
+
+            
+         
 
             <div class="main-content">
 
                 <div class="content-image" id="image">
-                    <img id="content-image" src="<?php echo "$imageRoute" ?>" alt="">
+                    <?php 
+                        foreach($imageRouteExplode as $image){
+                            echo "<img id='content-image' src='$image' alt='' >";
+                        }
+                    ?>
+                   
                 </div>
 
                 <div class="content">
@@ -258,7 +285,7 @@
                 </div>
 
             </div>
-
+<!-- 
             <div class="bottom-function">
 
                 <span
@@ -274,7 +301,7 @@
                     삭제
                 </span>
 
-            </div>
+            </div> -->
 
         </div>
 

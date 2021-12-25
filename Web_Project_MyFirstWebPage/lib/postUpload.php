@@ -20,10 +20,16 @@ if($loginCheck==="false"){
 $nickName=$_SESSION['nickName'];
 $title=$_POST['title'];
 $content=$_POST['textarea'];
+
+// post로 넘어온 여러개의 파일들의 갯수와, 임시저장된 이름을 array, 변수에 넣는다.
 $tempFile = $_FILES['imgFile']['tmp_name'];
+$countfiles=count($tempFile);
+
+
 
 //이미지 저장용
 $nowDate = date("Ymd_His");
+
 //업데이트 관련 변수들
 $nowDateSave = date("Y-m-d H:i:s");
 
@@ -50,24 +56,27 @@ if($update=="false"){
 
     //이미지가 존재할 경우 서버에 저장하고, 그 경로를 db에 옮겨담기
     else{
-
-        $fileTypeExt = explode("/", $_FILES['imgFile']['type']);
-        $fileType = $fileTypeExt[0];
-        $fileExt = $fileTypeExt[1];
-        $fileName=explode(".",$_FILES['imgFile']['name']);
-        $resFile="../RESOURCE/img/".$nowDate.".".$fileName[1];
-        //$resFile ="../RESOURCE/img/{$_FILES['imgFile']['name']}".$nowDate;
-        $imageupload=move_uploaded_file($tempFile,$resFile);
-
-        if($imageupload==true){
-        // echo "<script>
-        // alert('서버 이미지 업로드성공')
-        // </script>";
+        $imageRouteCollect;
+        for($i=0;$i<$countfiles;$i++){
+            $fileTypeExt = explode("/", ($_FILES['imgFile']['type'])[$i]);
+            $fileType = $fileTypeExt[0];
+            $fileExt = $fileTypeExt[1];
+            $fileName=explode(".",$_FILES['imgFile']['name'][$i]);
+            $resFile="../RESOURCE/img/".$nowDate.$i.".".$fileName[1];
+            //$resFile ="../RESOURCE/img/{$_FILES['imgFile']['name']}".$nowDate;
+            $imageupload=move_uploaded_file($tempFile[$i],$resFile);
+            $imageRouteCollect .=$resFile."-";
+            if($imageupload==true){
+            // echo "<script>
+            // alert('서버 이미지 업로드성공')
+            // </script>";
+            }
+    
+            else{
+                echo "posting 실패";
+            }
         }
-
-        else{
-            echo "posting 실패";
-        }
+      
 
     }   
     //이미지가 없을 떄, db 업로드하는 부분
@@ -81,7 +90,7 @@ if($update=="false"){
     else{
     
         $sql= "INSERT INTO PostTable (Post_Writer,Post_Category,Post_Title,Post_Content,Post_Image_Route) 
-        VALUES ( '$nickName', '자유게시판', '$title', '$content', '$resFile')";
+        VALUES ( '$nickName', '자유게시판', '$title', '$content', '$imageRouteCollect')";
     
     }
     //mysql에 데이터 삽입하는 코드
@@ -106,7 +115,7 @@ else{
 
    
     //수정 된 이미지에 아무것도 없을 경우
-    if($tempFile==null){
+    if($tempFile[0]==""){
 
         //이미지를 초기화 했을 경우
         if($imageClear=="true"){
@@ -116,7 +125,15 @@ else{
             $sql="SELECT Post_Image_Route From  PostTable where (Post_Number = '$serialNum')";
             $select_query=mysqli_query($db_connect,$sql);
             $route=mysqli_fetch_array($select_query);
-            unlink($route['Post_Image_Route']);
+            $deleteImageRoute=$route['Post_Image_Route'];
+            $deleteImageRouteArray=explode("-",$deleteImageRoute);
+            foreach($deleteImageRouteArray as $deleteRoute){
+                if($deleteRoute==""){
+                    break;
+                }
+                unlink($deleteRoute);
+            }
+          
 
 
             $sql= "UPDATE PostTable SET Post_Image_Route=null ,Post_Update='$nowDateSave',Post_Title = '$title' ,Post_Content = '$content' WHERE (Post_Number = '$serialNum')";

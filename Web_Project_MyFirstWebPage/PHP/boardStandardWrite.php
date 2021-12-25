@@ -2,34 +2,37 @@
 require_once('../lib/session.php');
 
 //update 로 들어왔을 경우 글 번호를 갖고, 수정하기 위해 데이터 불러오기.
-if(isset($_POST['Post_Num'])){
-    $updateCheck="true";
-    $serialNum=$_POST['Post_Num'];
-    require_once('../lib/dbConnect.php');
-    $db_connect = sqlCheck();
-    
-    $select_query="SELECT * from PostTable where Post_Number=$serialNum and Post_Category='자유게시판' ";
-    $select_result = mysqli_query($db_connect,$select_query);
-    $Data = mysqli_fetch_array($select_result);
 
-    $name=$Data['Post_Writer'];
-    $date=$Data['Post_Date'];
-    $imageRoute=$Data['Post_Image_Route'];
-    $content=$Data['Post_Content'];
-    $title=$Data['Post_Title'];
+        if(isset($_POST['Post_Num'])){
+            $updateCheck="true";
+            $serialNum=$_POST['Post_Num'];
+            require_once('../lib/dbConnect.php');
+            $db_connect = sqlCheck();
+            
+            $select_query="SELECT * from PostTable where Post_Number=$serialNum and Post_Category='자유게시판' ";
+            $select_result = mysqli_query($db_connect,$select_query);
+            $Data = mysqli_fetch_array($select_result);
 
-    //자바스크립트로 textarea에 찍어주기 위해서 개행문자 "\n" 로바꿔주는 함수
-    $contentPrint = str_replace("\r\n", "\\n", $content);
-}
-else{
-    $serialNum=null;
-    $content="";
-    $updateCheck="false";
-    $imageRoute=null;
-    $title="";
-    $contentPrint="";
+            $name=$Data['Post_Writer'];
+            $date=$Data['Post_Date'];
+            $imageRoute=$Data['Post_Image_Route'];
+            $imageRouteArray=explode("-",$imageRoute);
 
-}
+            $content=$Data['Post_Content'];
+            $title=$Data['Post_Title'];
+
+            //자바스크립트로 textarea에 찍어주기 위해서 개행문자 "\n" 로바꿔주는 함수
+            $contentPrint = str_replace("\r\n", "\\n", $content);
+        }
+        else{
+            $serialNum=null;
+            $content="";
+            $updateCheck="false";
+            $imageRoute=null;
+            $title="";
+            $contentPrint="";
+
+        }
 
 
 ?>
@@ -106,17 +109,21 @@ else{
                     <textarea name="textarea" id="editor" cols="30" rows="10"></textarea>
                 </div>
                 <img src="" alt="" id="image-preview" width=150px height=150px>
-                <input id="img-selector" name="imgFile" type="file" accept="image/*"/>
+                
+                <span> &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <input id="img-selector" name="imgFile[]" type="file" accept="image/*" multiple/>
                
                 <div>
-                <span id="image-text">이미지 미리보기</span>
+                <span id="image-text">상위 이미지 외 <?php echo count($imageRouteArray)-2; echo "개";?></span>
                 <span id="img-reset" class="img-reset">이미지 초기화</span>
+                <span> (이미지 초기화시 복구 불가능 합니다.)</span>
                 </div>
             </form>
 
         </div>
 
         <script>
+            let imageText = document.getElementById('image-text');
             let imageClear=false;
             let postForm = document.getElementById('postForm');
             let files=document.getElementById("img-selector");
@@ -187,7 +194,7 @@ else{
 
                 postText.innerText="글 수정";
                 boardTitle.innerText="자유게시판 글 수정"
-                previewImage.src="<?php echo $imageRoute; ?>";
+                previewImage.src="<?php echo $imageRouteArray[0]; ?>";
                 textarea.value="<?php echo $contentPrint;?>";
                 title.value="<?php echo $title; ?>";
 
@@ -212,12 +219,11 @@ else{
                 const reader = new FileReader();
                 reader.addEventListener('load', function (e) {
 
-
                     previewImage.src=e.target.result;
                     imageClear=false;
-                   
-                    //document.execCommand('insertImage',false,"../RESOURCE/img/abcd.png");
+                    imageText.style.visibility="hidden";
 
+                    //document.execCommand('insertImage',false,"../RESOURCE/img/abcd.png");
                 });
                 reader.readAsDataURL(file);
             }
