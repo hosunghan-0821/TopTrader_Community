@@ -1,0 +1,41 @@
+
+.chatWindow{
+  border: 1px solid black;
+  height: 600px;
+  width: 90%;
+  padding: 5px;
+  overflow-y: auto;
+}
+.userInput{
+
+  padding: 5px;
+  display: flex;
+  flex-direction: row;
+
+}
+.userText{
+  height: 50px;
+  width: 70%;
+}
+.sendMessage{
+  height: 50px;
+  width: 20%;
+}
+.chat-server{
+  margin: auto;
+  background-color: seashell;
+  text-align: center;
+  width: 80%;
+}
+.chat-mine{
+  width: 40%;
+  margin-left: auto;
+  background-color: antiquewhite;
+  text-align: right;
+}
+.chat-other{
+  width: 40%;
+  margin-right: auto;
+  background-color: azure;
+  text-align: left;
+}

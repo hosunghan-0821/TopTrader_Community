@@ -73,7 +73,7 @@
                 <div class="nav-item">
                     <a href="board.php">게시판</a>
                 </div>
-                <!-- <div class="nav-item">실시간 채팅</div> -->
+                <div id="chat" class="nav-item">실시간 채팅</div>
                 <div class="nav-item">
                     <a href="login.html" id="loginCheck">로그인</a>
                 </div>
@@ -191,6 +191,15 @@
         <footer>footer</footer>
 
         <script>
+            // 채팅 팝업창 만들기
+            const chat = document.getElementById("chat");
+            chat.addEventListener('click', function(e){
+                window.open("../ChatExample/chat_client.html", '', 'width=600,height=1000,left=0,top=0');
+            })
+        
+
+
+
             //로그인 관련 스킄립트
             var a = "<?php echo  $loginCheck; ?>";
 
