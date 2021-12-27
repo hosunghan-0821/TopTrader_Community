@@ -185,17 +185,46 @@ else{
         $sql="SELECT Post_Image_Route From  PostTable where (Post_Number = '$serialNum')";
         $select_query=mysqli_query($db_connect,$sql);
         $route=mysqli_fetch_array($select_query);
-        unlink($route['Post_Image_Route']);
+        // unlink($route['Post_Image_Route']);
+        $deleteImageRoute=$route['Post_Image_Route'];
+        $deleteImageRouteArray=explode("-",$deleteImageRoute);
+        foreach($deleteImageRouteArray as $deleteRoute){
+            if($deleteRoute==""){
+                break;
+            }
+            unlink($deleteRoute);
+        }
+
+        $imageRouteCollect;
+        for($i=0;$i<$countfiles;$i++){
+            $fileTypeExt = explode("/", ($_FILES['imgFile']['type'])[$i]);
+            $fileType = $fileTypeExt[0];
+            $fileExt = $fileTypeExt[1];
+            $fileName=explode(".",$_FILES['imgFile']['name'][$i]);
+            $resFile="../RESOURCE/img/".$nowDate.$i.".".$fileName[1];
+            //$resFile ="../RESOURCE/img/{$_FILES['imgFile']['name']}".$nowDate;
+            $imageupload=move_uploaded_file($tempFile[$i],$resFile);
+            $imageRouteCollect .=$resFile."-";
+            if($imageupload==true){
+            // echo "<script>
+            // alert('서버 이미지 업로드성공')
+            // </script>";
+            }
+    
+            else{
+                echo "posting 실패";
+            }
+        }
 
 
-        $fileName=explode(".",$_FILES['imgFile']['name']);
-        $resFile="../RESOURCE/img/".$nowDate.".".$fileName[1];
+        // $fileName=explode(".",$_FILES['imgFile']['name']);
+        // $resFile="../RESOURCE/img/".$nowDate.".".$fileName[1];
 
       
-        //수정 된 이미지가 존재할 경우 업로드 시키고, 그 경로를 데이터베이스에 저장
+        // //수정 된 이미지가 존재할 경우 업로드 시키고, 그 경로를 데이터베이스에 저장
 
-        move_uploaded_file($tempFile,$resFile);
-        $sql= "UPDATE PostTable SET Post_Update='$nowDateSave', Post_Image_Route='$resFile' ,Post_Title = '$title', Post_Content = '$content' WHERE (Post_Number = '$serialNum')";
+        // move_uploaded_file($tempFile,$resFile);
+        $sql= "UPDATE PostTable SET Post_Update='$nowDateSave', Post_Image_Route='$imageRouteCollect' ,Post_Title = '$title', Post_Content = '$content' WHERE (Post_Number = '$serialNum')";
         $update_result=mysqli_query($db_connect,$sql);
         if($update_result){
         

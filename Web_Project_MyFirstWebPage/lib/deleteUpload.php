@@ -12,13 +12,17 @@
         
         $Data =mysqli_fetch_array($select_query);
         if( $Data['Post_Image_Route'] !== null){
-            unlink($Data['Post_Image_Route']);
+            $imageRoute=$Data['Post_Image_Route'];
+            $imageRouteArray=explode("-",$imageRoute);
+            foreach($imageRouteArray as $imageRoute){
+                if($imageRoute==""){
+                    break;
+                }
+                unlink($imageRoute);
+            }
         }
        
     }
-
-    
-
 
     //여기서 해당 하는 row찾아서 delete result;
     $sql="DELETE FROM PostTable WHERE (Post_Number='$post_data->num')";

@@ -17,7 +17,14 @@ require_once('../lib/session.php');
             $date=$Data['Post_Date'];
             $imageRoute=$Data['Post_Image_Route'];
             $imageRouteArray=explode("-",$imageRoute);
-
+      
+            $imageRouteCount=count($imageRouteArray)-2;
+            if($imageRouteCount<0){
+                $imageRouteCount="";
+            }
+            else{
+                $imageRouteCount="상위 이미지 외 ".($imageRouteCount)."개";
+            }
             $content=$Data['Post_Content'];
             $title=$Data['Post_Title'];
 
@@ -28,9 +35,10 @@ require_once('../lib/session.php');
             $serialNum=null;
             $content="";
             $updateCheck="false";
-            $imageRoute=null;
+            $imageRouteArray[0]=null;
             $title="";
             $contentPrint="";
+            $imageRouteCount="";
 
         }
 
@@ -114,7 +122,7 @@ require_once('../lib/session.php');
                 <input id="img-selector" name="imgFile[]" type="file" accept="image/*" multiple/>
                
                 <div>
-                <span id="image-text">상위 이미지 외 <?php echo count($imageRouteArray)-2; echo "개";?></span>
+                <span id="image-text"> <?php echo $imageRouteCount; ?></span>
                 <span id="img-reset" class="img-reset">이미지 초기화</span>
                 <span> (이미지 초기화시 복구 불가능 합니다.)</span>
                 </div>
@@ -202,6 +210,7 @@ require_once('../lib/session.php');
 
             //수정안할 때,
             else{
+                imageText.style.visibility="hidden";
                 
             }
             //이미지 선택할 떄 동적으로 이미지 띄어주는 곳

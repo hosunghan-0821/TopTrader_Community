@@ -178,13 +178,13 @@
                     id="post-update"
                     class="bottom-function-update"
                     onclick="updateFunction()">
-                    게시글 수정
+                     수정
                 </span>
                 <span
                     id="post-delete"
                     class="bottom-function-delete"
                     onclick="deleteFunction()">
-                    게시글 삭제
+                     삭제
                 </span>
 
                 </div>
@@ -192,7 +192,6 @@
             </div>
 
             
-         
 
             <div class="main-content">
 

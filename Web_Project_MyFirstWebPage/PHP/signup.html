@@ -215,11 +215,11 @@
                 function passwordCheckFunction() {
 
                     var error = document.getElementById("certifyPassword");
-                    console.log("passwordcheckFucntion 작동합니다.")
-                    console.log(
-                        "password value : " + password.value + "passwordcheck value :" +
-                        passwordCheck.value
-                    );
+                    // console.log("passwordcheckFucntion 작동합니다.")
+                    // console.log(
+                    //     "password value : " + password.value + "passwordcheck value :" +
+                    //     passwordCheck.value
+                    // );
                     if (passwordCheck.value !== password.value) {
 
                         error.innerText = "비밀번호가 다릅니다.";
@@ -360,7 +360,7 @@
                         .then((data)=>{
                             if(data!="false"){
                                 emailValidNumber=data;
-                              
+                                console.log(data);
                             }
                             else{
                                 emailValidNumber="fail";

@@ -84,10 +84,9 @@
   text-align: center;
 }
 #content-image{
-  width: 30%;
-  
+  width: 40%;
+  margin: 5%;
  
-  object-fit: contain;
 }
 .content{
     margin: 50px;
