@@ -32,16 +32,25 @@ $nowDate = date("Ymd_His");
 
 //업데이트 관련 변수들
 $nowDateSave = date("Y-m-d H:i:s");
+if(isset($_POST['update'])){
 
-$update=$_POST['update'];
-$serialNum=$_POST['Post_Num'];
+    $update=$_POST['update'];
+    $serialNum=$_POST['Post_Num'];
+}
+
 
 if(!isset($update)){
     $update="false";
     $serialNum=-1;  
 }
 else{
-    $imageClear=$_POST['imageClear'];
+    if(isset($_POST['imageClear'])){
+        $imageClear=$_POST['imageClear'];
+    }
+    else{
+        $imageClear="";
+    }
+    
 }
 
 //업데이트가 아닐경우
@@ -50,13 +59,13 @@ if($update=="false"){
 
     //이미지가 없을경우 
 
-    if($tempFile==null){
+    if($tempFile[0]==""){
 
     }
 
     //이미지가 존재할 경우 서버에 저장하고, 그 경로를 db에 옮겨담기
     else{
-        $imageRouteCollect;
+        $imageRouteCollect="";
         for($i=0;$i<$countfiles;$i++){
             $fileTypeExt = explode("/", ($_FILES['imgFile']['type'])[$i]);
             $fileType = $fileTypeExt[0];
@@ -185,17 +194,20 @@ else{
         $sql="SELECT Post_Image_Route From  PostTable where (Post_Number = '$serialNum')";
         $select_query=mysqli_query($db_connect,$sql);
         $route=mysqli_fetch_array($select_query);
-        // unlink($route['Post_Image_Route']);
+       
         $deleteImageRoute=$route['Post_Image_Route'];
         $deleteImageRouteArray=explode("-",$deleteImageRoute);
-        foreach($deleteImageRouteArray as $deleteRoute){
-            if($deleteRoute==""){
-                break;
-            }
-            unlink($deleteRoute);
-        }
+        
 
-        $imageRouteCollect;
+        // foreach($deleteImageRouteArray as $deleteRoute){
+        //     if($deleteRoute==""){
+        //         break;
+        //     }
+        //     unlink($deleteRoute);
+        // }
+        $imageNumOriginal=count($deleteImageRouteArray);
+       
+        $imageRouteCollect=$deleteImageRoute;
         for($i=0;$i<$countfiles;$i++){
             $fileTypeExt = explode("/", ($_FILES['imgFile']['type'])[$i]);
             $fileType = $fileTypeExt[0];
@@ -210,7 +222,6 @@ else{
             // alert('서버 이미지 업로드성공')
             // </script>";
             }
-    
             else{
                 echo "posting 실패";
             }

@@ -35,7 +35,6 @@
                 date.setDate(date.getDate()+expiredays);
                 // 쿠키 자바스크립트로 만들기.
                 document.cookie = escape(name) + "=" +escape(value) +"; expires="+date.toUTCString();
-
             }
 
             function closePopup(){

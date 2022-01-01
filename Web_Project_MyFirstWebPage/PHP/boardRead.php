@@ -83,7 +83,12 @@
     // query에서 가져온 정보들을 _이제 사용할 변수들 
     $date=$Data['Post_Date'];
     $imageRoute=$Data['Post_Image_Route'];
-    $imageRouteExplode=explode("-",$imageRoute);
+    if($imageRoute!=""){
+        $imageRouteExplode=explode("-",$imageRoute);
+    }
+    else{
+        $imageRouteExplode="";
+    }
     $content=$Data['Post_Content'];
     $title=$Data['Post_Title'];
     $dateTime=explode(" ",$date);
@@ -198,6 +203,9 @@
                 <div class="content-image" id="image">
                     <?php 
                         foreach($imageRouteExplode as $image){
+                            if($image==""){
+                                break;
+                            }
                             echo "<img id='content-image' src='$image' alt='' >";
                         }
                     ?>
@@ -323,7 +331,7 @@
                 form.setAttribute('action', '../PHP/boardStandardWrite.php');
 
                 var textField = document.createElement('input');
-                textField.setAttribute('type', 'text');
+                textField.setAttribute('type', 'hidden');
                 textField.setAttribute('name', 'Post_Num');
                 textField.setAttribute('value', '<?php echo $serialNum; ?>');
                 form.appendChild(textField);
@@ -486,7 +494,7 @@
           
             //댓글 삭제하는 함수
             function replyDeleteFunction(replyWriter,replyNum){
-
+                console.log(replyWriter);
                 if(replyWriter==="<?php echo $nickName; ?>"){
                     //삭제하는  로직
 

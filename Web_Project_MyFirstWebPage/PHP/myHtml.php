@@ -191,16 +191,69 @@
         <footer>footer</footer>
 
         <script>
+
             // 채팅 팝업창 만들기
+
             const chat = document.getElementById("chat");
+
             chat.addEventListener('click', function(e){
-                window.open("../ChatExample/chat_client.html", '', 'width=600,height=1000,left=0,top=0');
-            })
-        
+                let userCheck="true";
+                if("<?php echo $NickName?>"!=""){
+
+                    fetch("http://192.168.163.131:3000/test", {
+                        method: 'POST',
+                        cache: 'no-cache',
+                        headers: {
+                            'Content-Type': 'application/json; charset=utf-8'
+                        },
+                    })
+                        .then((res) => res.text())
+                        .then((data) => {
+                           console.log(data);
+                           const obj =JSON.parse(data);
+                        //    console.log(obj);
+                       
+                        // obj.chatUser[0]
+                        for(let i=0; i<obj.chatUser.length;i++){
+                            console.log(obj.chatUser[i]);
+                            if(obj.chatUser[i]=='<?=$NickName?>'){
+                                console.log("확인");
+                                userCheck="false";
+                            }
+                            
+                        }
+                        if(userCheck==="true"){
+                            alert("실시간채팅 접속허용");
+                            window.open("../ChatExample/chat_client.php", '', 'width=600,height=1000,left=0,top=0');
+                        }
+                        else{
+                            alert("실시간채팅 접속불가 같은 아이디로 사용중");
+                        }
+                           
+                        //   for(var i in data){
+                        //       console.log(data[i]['chatUser']);
+                        //   }
+                          
+                        //    console.log(data."chatUser".[0]);
+                        //    for(var i in data){
+                        //        console.log(i);
+                        //    }
+                        //    foreach(key as data){
+                        //        console.log(key);
+                        //    }
+                        });
+               
+                   
+                }
+                else{
+                    alert("로그인 없이는 실시간 채팅 기능 사용 불가능 합니다");
+                    location.href="login.html";
+                }
+               
+            });
 
 
-
-            //로그인 관련 스킄립트
+            //로그인 관련 스크립트
             var a = "<?php echo  $loginCheck; ?>";
 
             if (a === "true") {
@@ -230,6 +283,8 @@
             }
 
 
+            //쿠키관련스크립트들
+
             //쿠키 가져오는 스크립트.
             function getCookie(name)
             {
@@ -243,15 +298,14 @@
                     }
                     for(var index in cookie_array){
                         var cookie_name = cookie_array[index].split("=");
-                        if(cookie_name[0]=="hosung"){
+                        if(cookie_name[0]==name){
                             console.log("여기 들어왔어요");
                             return cookie_name[1];
                         }
                     }
                    
                 }
-                return ;
-
+                return "false";
             }
 
             function openPopup(url){

@@ -116,3 +116,32 @@ a{
     border: 1px black solid;
     cursor: pointer;
 }
+.updateImage{
+   text-align: lefts;
+}
+.imageRoutePreview{
+    margin: 20px;
+    width: 20%;
+}
+.upload-image{
+    margin: 20px;
+    width: 20%;
+    height: 150px;
+    object-fit: contain;
+}
+.image-existing{
+  
+    border-top: black solid 3px;
+}
+.deleteButton{
+    cursor: pointer;
+}
+/* .img-upload-new{
+    border: black 2px solid;
+} */
+.deleteButton{
+    font-size: 30px;
+}
+.image-plus{
+    border-top: black solid 3px;
+}

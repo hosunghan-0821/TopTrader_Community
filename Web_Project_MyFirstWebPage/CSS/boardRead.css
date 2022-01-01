@@ -81,11 +81,14 @@
 }
 
 .content-image{
-  text-align: center;
+  text-align: left;
 }
 #content-image{
-  width: 40%;
-  margin: 5%;
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+  margin: 10px;
+  
  
 }
 .content{

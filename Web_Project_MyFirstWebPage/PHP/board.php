@@ -392,8 +392,14 @@
             }
 
             function writeFunction() {
-               
-                 document.location.href = 'boardStandardWrite.php';
+                 if(<?php echo $loginCheck ?>===true){
+                    document.location.href = 'boardStandardWrite.php';
+                 }
+                 else{
+                     alert("로그인 없이 글 작성 불가능 합니다.");
+                     document.location.href = 'login.html';
+                 }
+                
             }
             // function readFunction() {
 

@@ -1,3 +1,15 @@
+<?php 
+      require_once $_SERVER['DOCUMENT_ROOT'].'/Web_Project_MyFirstWebPage/lib/session.php';
+
+      if(!isset($_SESSION['nickName'])){
+        $NickName="";
+    }
+    else{
+        $NickName=$_SESSION['nickName'];
+    }
+    
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,14 +41,17 @@
 
   <script>
    
-    var name =prompt('대화명을 입력해주세요.','');
+    var name ='<?= $NickName?>';
     var socketId;
     //들어오자마자 스크립트를 통해 바로 connect 된다.
     var socket = io.connect('http://192.168.163.131:3000',{
         cors:{origin:'*'}
+        ,transports:['websocket']
     });
     //연결이 됬을 경우, user가 선택한 이름을 보내고,  그 이름에 해당하는 소켓 생성
     socket.on('connect',function(){
+      console.log("123");
+    socket.emit('connectUser',name);
     socket.emit('newUserConnect',name);
     });
     //연결될 경우 소켓id 를 client에게 제공
@@ -44,7 +59,12 @@
       socketId=data;
       console.log(socketId);
     })
-   
+    // socket.on('mustDisconnect',function(data){
+    //   if(data=="true"){
+    //     console.log("dd");
+    //     socket.close();
+    //   }
+    // });
     var chatWindow= document.getElementById('chatWindow');
     //socket 에게 msg를 받아서 화면에 뿌려주는 용도.
 
