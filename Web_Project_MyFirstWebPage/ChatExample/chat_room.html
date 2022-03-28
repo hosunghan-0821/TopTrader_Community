@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/Web_Project_MyFirstWebPage/ChatExample/node_modules/socket.io/client-dist/socket.io.js" ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div>
+        채팅방
+        <div>
+            <div id="Room1">Room1</div>
+            <div id="Room2">Room2</div>
+        </div>
+    </div>
+    <script>
+        // 방에 대한 정보만 뿌려주면 되는거고
+        // 해당하는 방에 대한 정보는 서버로부터 받으면되고,
+        // 일단 정적으로 작동하게끔 작성해보자 
+
+        // 클릭할 때, 해당하는 방으로 이동.
+        let Room1=document.getElementById('Room1');
+        let Room2=document.getElementById('Room2');
+
+        Room1.addEventListener('click',function(){
+            window.open("../ChatExample/chat_place.php?chat=Room1", '', 'width=600,height=1000,left=0,top=0');
+        });
+        Room2.addEventListener('click',function(){
+            window.open("../ChatExample/chat_place.php?chat=Room2", '', 'width=600,height=1000,left=0,top=0');
+        });
+
+    </script>
+</body>
+</html>

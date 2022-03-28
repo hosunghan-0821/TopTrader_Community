@@ -18,7 +18,7 @@
  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Socket.io Test</title>
-  <link rel="stylesheet" href="../CSS/chat.css">
+  <link rel="stylesheet" href="../CSS/chatNew.css">
   <script src="/Web_Project_MyFirstWebPage/ChatExample/node_modules/socket.io/client-dist/socket.io.js" ></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -29,8 +29,18 @@
   <input id="myChat" type="text"> -->
 
   <div>
-    <div id="info"></div>
-    <div class="chatWindow" id="chatWindow"></div>
+    <div id="info-nav">
+      <div class="chat-room-name">Top-trader-Community 채팅방</div>
+      <div class="chat-user-info">참여유저 목록</div>
+    </div>
+    
+    <div class="mainWindow">
+
+      <div class="chatWindow" id="chatWindow">  </div>
+      <div class="userWindow" id="userWindow"> 참여유저</div>
+
+    </div>
+   
     <div class="userInput">
       <input class="userText" id="chatInput" type="text" placeholder="채팅을 입력하세요">
       <button class="sendMessage" id="chatMessageSendBtn" > 입력 </button>
@@ -40,6 +50,8 @@
 
 
   <script>
+    var chatWindow= document.getElementById('chatWindow');
+    //socket 에게 msg를 받아서 화면에 뿌려주는 용도.
    
     var name ='<?= $NickName?>';
     var socketId;
@@ -50,7 +62,22 @@
     });
     //연결이 됬을 경우, user가 선택한 이름을 보내고,  그 이름에 해당하는 소켓 생성
     socket.on('connect',function(){
-      console.log("123");
+
+      let today = new Date();   
+      let year = today.getFullYear(); // 년도
+      let month = today.getMonth() + 1;  // 월
+      let date = today.getDate();  // 날짜
+      let day = today.getDay();  // 요일
+
+      var wrap = document.createElement('p'); 
+      var message = document.createElement('span');
+      message.innerText=year+'/'+month+'/'+date;
+      wrap.appendChild(message);
+      wrap.classList.add('chat-server');
+      chatWindow.appendChild(wrap);
+
+
+    
     socket.emit('connectUser',name);
     socket.emit('newUserConnect',name);
     });
@@ -59,23 +86,25 @@
       socketId=data;
       console.log(socketId);
     })
-    // socket.on('mustDisconnect',function(data){
-    //   if(data=="true"){
-    //     console.log("dd");
-    //     socket.close();
-    //   }
-    // });
-    var chatWindow= document.getElementById('chatWindow');
-    //socket 에게 msg를 받아서 화면에 뿌려주는 용도.
+ 
+ 
 
     socket.on('updateMessage', function (data) {
 
         var chatMessageEl= drawChatMessage(data);
         chatWindow.appendChild(chatMessageEl);
+       
         //스크롤 알아서 내려오게 해주는 코드
         chatWindow.scrollTop = chatWindow.scrollHeight;
     
     });
+    socket.on('userListPlus',function(data){
+      console.log(data);
+      $("#userWindow").empty();
+        var userList=drawUserList(data);
+        userWindow.appendChild(userList);
+    });
+    
 
     //채팅을 자바스크립트 함수 drawChatMessage()를 활용하여 가져온 정보 화면에뿌리기.
     function drawChatMessage(data){
@@ -112,7 +141,21 @@
       wrap.appendChild(name);
       wrap.appendChild(message);
       return wrap;
+    }
 
+    function drawUserList(data){
+      var wrap = document.createElement('p'); 
+      for(let i=0;i<data.length;i++){
+        console.log(data[i]);
+        var name = document.createElement('div');
+        name.innerText=data[i];
+        if(name.innerText==='<?php echo $NickName?>'){
+          name.classList.add('chat-list-mine');
+        }
+        name.classList.add('chat-list-username');
+        wrap.appendChild(name);
+      }
+    return wrap;
     }
 
     // 사용자 입력란, 전송란

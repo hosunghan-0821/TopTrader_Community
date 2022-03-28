@@ -38,7 +38,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>주식 커뮤니티</title>
-        <link rel="stylesheet" href="../CSS/myHtml.css">
+        <link rel="stylesheet" href="../CSS/myHtmlupdate.css">
         <link
             href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"
             rel="stylesheet">
@@ -66,6 +66,9 @@
             </span>
 
             <div class="nav-right-items">
+                <div id="login-nickname" class="nav-item" class="login-nickname">
+
+                </div>
 
                 <div class="nav-item">
                     <a href="myHtml.php">홈</a>
@@ -198,6 +201,7 @@
 
             chat.addEventListener('click', function(e){
                 let userCheck="true";
+                console.log("<?php echo $NickName?>");
                 if("<?php echo $NickName?>"!=""){
 
                     fetch("http://192.168.163.131:3000/test", {
@@ -263,6 +267,10 @@
                 document
                     .getElementById("loginCheck")
                     .href = "../lib/logout.php";
+                let loginNick=document.getElementById("login-nickname");
+                loginNick.style.display="block";
+                loginNick.innerText='<?= $NickName?>'+' 님 환영합니다.';
+               
 
                 let mypage =document.getElementById("mypage");
                 mypage.innerText="내 정보";

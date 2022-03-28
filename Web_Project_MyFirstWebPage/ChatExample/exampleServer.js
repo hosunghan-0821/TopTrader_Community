@@ -39,63 +39,24 @@ app.use('/test', (req, res) => {
 
 // 연결이 됬을 때, socket.emit을 통해서, 메시지를 전달한다.
 io.sockets.on('connection', function (socket) {
-  console.log(socket.id, 'Connected');
+
+    console.log(socket.id, 'Connected');
   
-  //입장시 회원 등록하기
-  socket.on('connectUser',function(name){
-    chatArray.push(name);
-    // chatArray.forEach(element => {
-    //   console.log(element);
-    //   if(element=="ㅇㅇ"){
-    //     console.log("요소가 ㅇㅇ 입니다");
-    //     socket.emit('mustDisconnect',"true");
-    //   }
+    //입장시 회원 등록하기
+
+  socket.on('joinRoom',function(roomName,name){
+    socket.join(roomName);
+    io.sockets.in('Room1').emit('joinRoom',roomName,name);
+    // socket.join(roomName,function(){
+    //     console.log("123");
+    //     socket.to(roomName).emit('joinRoom',roomName,name);
     // });
-    console.log(chatArray);
   });
 
-  //입장시 입장 알림 보내기
-  socket.on('newUserConnect',function(name){
-    // console.log(socket.id, name);
-    socket.emit('socketId',socket.id);
-    socket.name=name;
+  // socket.on('joinRoom',function(){
+  //   io.sockets.in(roomName).emit()
+  // });
 
-    var message= socket.name + '님이 입장했습니다.';
-    // console.log(socket.name,message);
-    io.sockets.emit('updateMessage',{
-      name: 'SERVER',
-      message : message,
-     
-    });
-    io.sockets.emit('userListPlus',chatArray)
-   
-  });
-
-  //퇴장시 입장 알림 보내기
-  socket.on('disconnect',function(){
-    var message = socket.name + '님이 퇴장했습니다.';
-    // console.log(socket.name,message);
-    for(let i=0;i<chatArray.length;i++){
-      if(chatArray[i]==socket.name){
-        chatArray.splice(i, 1);
-        i--;
-        console.log(chatArray);
-      }
-    }
-    io.sockets.emit('userListPlus',chatArray)
-    socket.broadcast.emit('updateMessage',{
-      name: 'SERVER',
-      message : message,
-    });
-  })
-
-  //메세지가 왔을 때, 그에 해당하는 내용 뿌려주기
-  socket.on('sendMessage', function (data) {
-    // console.log(socket.id, data);
-    data.name=socket.name;
-    data.socketId=socket.id;
-    io.sockets.emit('updateMessage',data);
-  });
 
 
 

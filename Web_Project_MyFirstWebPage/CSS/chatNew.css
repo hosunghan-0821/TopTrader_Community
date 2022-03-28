@@ -1,17 +1,42 @@
-
+.chat-room-name{
+  text-align: center;
+  margin: 20px;
+  font-weight: 600;
+}
+.chat-user-info{
+  text-align: right;
+}
+.chat-list-username{
+  text-align: right;;
+}
+.chat-list-mine{
+  color: green;
+  font-weight: 800;
+}
 .chatWindow{
   border: 1px solid black;
   height: 600px;
-  width: 90%;
+  width: 70%;
   padding: 5px;
   overflow-y: auto;
 }
 .userInput{
-
   padding: 5px;
   display: flex;
   flex-direction: row;
+}
+.mainWindow{
 
+  display: flex;
+  flex-direction: row;
+}
+.userWindow{
+  margin-left: 5px;
+  width: 30%;
+  border: 1px solid black;
+  height: 600px;
+  padding: 5px;
+  overflow-y: auto;
 }
 .userText{
   height: 50px;
